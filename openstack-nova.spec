@@ -178,6 +178,7 @@ Requires:         libvirt-python
 Requires:         libvirt >= 0.8.2
 Requires:         libxml2-python
 Requires:         python-cheetah
+Requires:         MySQL-python
 
 %description      compute
 Nova is a cloud computing fabric controller (the main part of an IaaS system)
