@@ -52,7 +52,7 @@ Requires(postun): initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils qemu-kvm
 
-Packager:	"Mirantis Inc." <openstack-support@mirantis.com>
+Packager:         "Mirantis Inc." <openstack-support@mirantis.com>
 
 %description
 Nova is a cloud computing fabric controller (the main part of an IaaS system)
@@ -134,6 +134,7 @@ Requires:         python-glance
 Requires:         python-novaclient
 Requires:         python-paste-deploy
 Requires:         python-migrate
+Requires:         python-ldap
 Requires:         radvd
 Requires:         iptables iptables-ipv6
 Requires:         iscsi-initiator-utils
