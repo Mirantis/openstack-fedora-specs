@@ -1,6 +1,6 @@
 Name:		openstack-dashboard
 Version:	2011.05
-Release:	48%{?dist}
+Release:	48.1%{?dist}
 Summary:	Dashboard for OpenStack
 
 Group:		Applications/System

@@ -6,7 +6,7 @@
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          1087%{?dist}
+Release:          1087.1%{?dist}
 Summary:          OpenStack Compute (nova)
 Distribution:     Fedora
 Vendor:           Mirantis
