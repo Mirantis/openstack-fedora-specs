@@ -302,7 +302,7 @@ This package contains documentation files for %{name}.
 
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+%patch3 -p1 -F2
 %patch4 -p1
 
 
