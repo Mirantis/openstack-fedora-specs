@@ -33,6 +33,11 @@ Source20:         %{name}-sudoers
 Source21:         %{name}-polkit.pkla
 Source22:         %{name}-ifc-template
 
+Patch1:           %{name}-ldapnotifier.patch
+Patch2:           %{name}-bridgeip.patch
+Patch3:           nova-api-creds.patch
+Patch4:           assign-net2project.patch
+
 BuildRoot:        %{_tmppath}/nova-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:        noarch
@@ -81,6 +86,7 @@ Requires:         %{name}-volume = %{version}-%{release}
 Requires:         openstack-client
 Requires:         openstack-glance
 Requires:         rabbitmq-server
+
 %if 0%{?with_doc}
 Requires:         %{name}-doc
 %endif
@@ -293,6 +299,11 @@ This package contains documentation files for %{name}.
 
 %prep
 %setup -q -n nova
+
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 
 %build
