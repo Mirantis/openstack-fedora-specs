@@ -9,10 +9,8 @@ URL:		https://launchpad.net/openstack-dashboard
 Source0:	https://launchpad.net/openstack-dashboard/dashboard.tar.gz
 #BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-Patch1:           %{name}-confs.patch
-
-BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:        noarch
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:      noarch
 Requires:	python-setuptools
 Requires:	python-boto >= 1.9b
 Requires:	python-nose
@@ -37,7 +35,6 @@ The Dashboard for OpenStack is a reference Django implementation that uses the d
 %prep
 %setup -q -n openstack-dashboard
 
-%patch1 -p1
 
 %build
 pushd django-nova
