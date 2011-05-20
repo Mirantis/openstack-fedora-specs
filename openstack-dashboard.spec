@@ -7,10 +7,11 @@ Group:		Applications/System
 License:	ASL 2.0
 URL:		https://launchpad.net/openstack-dashboard
 Source0:	https://launchpad.net/openstack-dashboard/dashboard.tar.gz
-#BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
+
 Requires:	python-setuptools
 Requires:	python-boto >= 1.9b
 Requires:	python-nose
@@ -34,7 +35,6 @@ The Dashboard for OpenStack is a reference Django implementation that uses the d
 
 %prep
 %setup -q -n openstack-dashboard
-
 
 %build
 pushd django-nova

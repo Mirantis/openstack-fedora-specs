@@ -124,7 +124,6 @@ Requires:         python-mox
 Requires:         python-redis
 Requires:         python-routes
 Requires:         python-sqlalchemy
-#Requires:         python-suds
 Requires:         python-tornado
 Requires:         python-twisted-core
 Requires:         python-twisted-web
@@ -274,12 +273,8 @@ BuildRequires:    python-nose
 # Required to build module documents
 BuildRequires:    python-IPy
 BuildRequires:    python-boto
-#BuildRequires:    python-carrot
-#BuildRequires:    python-daemon
 BuildRequires:    python-eventlet
 BuildRequires:    python-gflags
-#BuildRequires:    python-mox
-#BuildRequires:    python-redis
 BuildRequires:    python-routes
 BuildRequires:    python-sqlalchemy
 BuildRequires:    python-tornado
