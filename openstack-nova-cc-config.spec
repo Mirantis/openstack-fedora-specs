@@ -1,4 +1,4 @@
-Name:             openstack-nova-cc-config
+Name:             nova-cc-config
 Version:          2011.3
 Release:          1
 Summary:          OpenStack Compute (nova) - Cloud Controller config
@@ -13,20 +13,14 @@ BuildArch:        noarch
 
 BuildRequires:    perl
 
-Conflicts:        openstack-nova-compute-config
-Requires:         openstack-nova
+Conflicts:        nova-compute-config
+Requires:         nova
 Requires:         MySQL-python
 Requires:         mysql-server
-Provides:         openstack-nova-config
+Provides:         nova-config
 
 %description
 Configuration files for Nova as Cloud Controller.
-
-%prep
-#setup -q -n nova-%{version}
-
-%build
-#{__python} setup.py build
 
 %install
 rm -rf %{buildroot}
