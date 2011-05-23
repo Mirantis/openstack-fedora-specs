@@ -1,4 +1,4 @@
-Name:             openstack-nova-compute-config
+Name:             nova-compute-config
 Version:          2011.3
 Release:          1
 Summary:          OpenStack Compute (nova) - Compute node configuration
@@ -13,9 +13,9 @@ BuildArch:        noarch
 
 BuildRequires:    perl
 
-Conflicts:        openstack-nova-cc-config
-Requires:         openstack-nova
-Provides:         openstack-nova-config
+Conflicts:        nova-cc-config
+Requires:         nova
+Provides:         nova-config
 
 %description
 Configuration files for Nova as compute node.
