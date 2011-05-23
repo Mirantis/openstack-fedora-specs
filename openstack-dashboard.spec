@@ -19,6 +19,7 @@ Requires:	Django
 Requires:	django-nose
 Requires:	django-registration >= 0.7
 Requires:	nova-adminclient
+Requires:       django-auth-ldap
 
 Packager:	"Mirantis Inc." <openstack-support@mirantis.com>
 
