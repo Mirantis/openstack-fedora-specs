@@ -299,7 +299,7 @@ This package contains documentation files for %{name}.
 %setup -q -n nova
 
 %patch1 -p1
-%patch2 -p1
+%patch2 -p1 -F2
 
 
 %build
