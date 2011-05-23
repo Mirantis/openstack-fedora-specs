@@ -1,6 +1,6 @@
 Name:		openstack-dashboard
 Version:	2011.05
-Release:	48.1%{?dist}
+Release:	48%{?dist}
 Summary:	Dashboard for OpenStack
 
 Group:		Applications/System
@@ -37,7 +37,7 @@ The Dashboard for OpenStack is a reference Django implementation that uses the d
 %setup -q -n openstack-dashboard
 
 %build
-pushd django-nova
+pushd django-openstack
 %{__python} setup.py build
 popd
 pushd django-nova-syspanel
@@ -46,7 +46,7 @@ popd
 
 %install
 rm -rf %{buildroot}
-pushd django-nova
+pushd django-openstack
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 popd
 pushd django-nova-syspanel
@@ -56,16 +56,12 @@ install -d -m 755 %{buildroot}/opt/openstack-dashboard
 cp -r openstack-dashboard %{buildroot}/opt/
 
 %clean
-#rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 
 %files 
 /opt/openstack-dashboard
 /usr
-
-#%defattr(-,root,root,-)
-#%doc
-
 
 
 %changelog
