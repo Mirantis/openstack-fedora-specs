@@ -9,7 +9,6 @@ URL:		https://launchpad.net/openstack-dashboard
 Source0:	https://launchpad.net/openstack-dashboard/dashboard.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
 Requires:	python-setuptools
