@@ -35,8 +35,6 @@ Source22:         %{name}-ifc-template
 
 Patch1:           %{name}-ldapnotifier.patch
 Patch2:           %{name}-bridgeip.patch
-Patch3:           nova-api-creds.patch
-Patch4:           assign-net2project.patch
 
 BuildRoot:        %{_tmppath}/nova-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -302,8 +300,6 @@ This package contains documentation files for %{name}.
 
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1 -F2
-%patch4 -p1 -F2
 
 
 %build
