@@ -7,7 +7,7 @@
 
 Name:		%{pkg}
 Version:	1.0b7
-Release:	%{?dist}
+Release:	1%{?dist}
 Summary:	Django LDAP authentication backend
 
 Group:		Development/Python
