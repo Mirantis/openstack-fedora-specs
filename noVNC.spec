@@ -16,7 +16,11 @@ Packager:	"Mirantis Inc." <openstack-support@mirantis.com>
 %description
 noVNC is a VNC client implemented using HTML5 technologies, specifically Canvas and WebSockets (supports 'wss://' encryption).
 
+
+%prep
 %setup -q -n noVNC
+
+%build
 
 %install
 rm -rf %{buildroot}
