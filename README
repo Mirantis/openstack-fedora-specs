@@ -1,6 +1,5 @@
 SPEC files for build OpenStack pakages and dependencies not included to official fedora repositories.
 
-
 django-auth-ldap.spec
 django-nose.spec
 django-registration.spec

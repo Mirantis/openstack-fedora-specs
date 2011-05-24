@@ -1,6 +1,6 @@
 Name:		noVNC
 Version:	2011.05
-Release:	i1%{?dist}
+Release:	1%{?dist}
 Summary:	VNC client using HTML5 (Web Sockets, Canvas) with encryption (wss://) support.
 
 Group:		Applications/System
