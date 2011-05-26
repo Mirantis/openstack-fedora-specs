@@ -26,16 +26,16 @@ Configuration files for Nova as Cloud Controller.
 rm -rf %{buildroot}
 
 # Setup directories
-install -d -m 755 %{buildroot}%{_sysconfdir}/nova
+install -d -m 755 -g nova %{buildroot}%{_sysconfdir}/nova
 
 # Install config files
-install -p -D -m 644 %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
+install -p -D -m 644 -g nova %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
 
 %clean
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,nova,-)
 %config(noreplace) %{_sysconfdir}/nova/nova.conf
 
 %changelog
