@@ -6,14 +6,14 @@
 %endif
 
 Name:		%{pkg}
-Version:	0.1.5
+Version:	0.1.7
 Release:	1%{?dist}
 Summary:	Nova admin client. Sincerly yours, K.O.
 
 Group:		Development/Python
 License:	MIT
 URL:		http://www.openstack.org
-Source0:	http://pypi.python.org/packages/source/n/nova-adminclient/nova-adminclient-0.1.5.tar.gz
+Source0:	http://pypi.python.org/packages/source/n/nova-adminclient/nova-adminclient-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildArch:	noarch
