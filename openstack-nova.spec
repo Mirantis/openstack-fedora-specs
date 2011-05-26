@@ -375,9 +375,9 @@ tar zxf %{SOURCE2} -C %{buildroot}%{_sharedstatedir}/nova/noVNC
 rm -rf %{buildroot}
 
 %pre
-getent group nova >/dev/null || groupadd -r nova --gid8774
+getent group nova >/dev/null || groupadd -r nova --gid 8774
 getent passwd nova >/dev/null || \
-useradd --uid8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
+useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
 -c "OpenStack Nova Daemons" nova
 exit 0
 
