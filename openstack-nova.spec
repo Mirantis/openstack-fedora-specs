@@ -15,7 +15,6 @@ Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
 Source0:          http://nova.openstack.org/tarballs/nova.tar.gz
-Source2:          %{name}-noVNC-snap2011.03.24.tgz
 Source6:          %{name}.logrotate
 
 # Initscripts
@@ -366,10 +365,6 @@ rm -fr %{buildroot}%{_datarootdir}/nova/{install_venv.py,nova-debug,pip-requires
 rm -fr %{buildroot}%{python_sitelib}/run_tests.*
 rm -f %{buildroot}%{_bindir}/nova-combined
 rm -f %{buildroot}/usr/share/doc/nova/README*
-
-# Add noVNC console
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/noVNC
-tar zxf %{SOURCE2} -C %{buildroot}%{_sharedstatedir}/nova/noVNC
 
 %clean
 rm -rf %{buildroot}
