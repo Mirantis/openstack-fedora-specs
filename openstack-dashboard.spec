@@ -14,7 +14,7 @@ BuildArch:      noarch
 Requires:	python-setuptools
 Requires:	python-boto >= 1.9b
 Requires:	python-nose
-Requires:	Django
+Requires:	Django >=1.3
 Requires:	django-nose
 Requires:	django-registration >= 0.7
 Requires:	nova-adminclient
