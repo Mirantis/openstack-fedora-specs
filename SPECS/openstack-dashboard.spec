@@ -7,17 +7,18 @@ Group:		Applications/System
 License:	ASL 2.0
 URL:		https://launchpad.net/openstack-dashboard
 Source0:	https://launchpad.net/openstack-dashboard/dashboard.tar.gz
-#BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
+
 Requires:	python-setuptools
 Requires:	python-boto >= 1.9b
 Requires:	python-nose
-Requires:	Django
+Requires:	Django >= 1.3
 Requires:	django-nose
 Requires:	django-registration >= 0.7
 Requires:	nova-adminclient
+Requires:       django-auth-ldap
 
 Packager:	"Mirantis Inc." <openstack-support@mirantis.com>
 
@@ -35,9 +36,8 @@ The Dashboard for OpenStack is a reference Django implementation that uses the d
 %prep
 %setup -q -n openstack-dashboard
 
-
 %build
-pushd django-nova
+pushd django-openstack
 %{__python} setup.py build
 popd
 pushd django-nova-syspanel
@@ -46,7 +46,7 @@ popd
 
 %install
 rm -rf %{buildroot}
-pushd django-nova
+pushd django-openstack
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 popd
 pushd django-nova-syspanel
@@ -56,16 +56,12 @@ install -d -m 755 %{buildroot}/opt/openstack-dashboard
 cp -r openstack-dashboard %{buildroot}/opt/
 
 %clean
-#rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 
 %files 
 /opt/openstack-dashboard
 /usr
-
-#%defattr(-,root,root,-)
-#%doc
-
 
 
 %changelog

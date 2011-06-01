@@ -1,4 +1,4 @@
-Name:             openstack-nova-compute-config
+Name:             nova-compute-config
 Version:          2011.3
 Release:          1
 Summary:          OpenStack Compute (nova) - Compute node configuration
@@ -13,9 +13,9 @@ BuildArch:        noarch
 
 BuildRequires:    perl
 
-Conflicts:        openstack-nova-cc-config
-Requires:         openstack-nova
-Provides:         openstack-nova-config
+Conflicts:        nova-cc-config
+Requires:         nova
+Provides:         nova-config
 
 %description
 Configuration files for Nova as compute node.
@@ -30,16 +30,16 @@ Configuration files for Nova as compute node.
 rm -rf %{buildroot}
 
 # Setup directories
-install -d -m 755 %{buildroot}%{_sysconfdir}/nova
+install -d -m 750 %{buildroot}%{_sysconfdir}/nova
 
 # Install config files
-install -p -D -m 644 %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
+install -p -D -m 640 %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
 
 %clean
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root,-)
+%defattr(-,root,nova,-)
 %config(noreplace) %{_sysconfdir}/nova/nova.conf
 
 %changelog

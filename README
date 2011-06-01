@@ -1,0 +1,19 @@
+SPEC files for build OpenStack pakages and dependencies not included to official fedora repositories.
+
+django-auth-ldap.spec
+django-nose.spec
+django-registration.spec
+nova-adminclient.spec
+openstack-client.spec
+openstack-dashboard.spec
+openstack-glance.spec
+openstack-nova-cc-config.spec
+openstack-nova-compute-config.spec
+openstack-nova.spec
+openstack-repo-private.spec
+openstack-repo.spec
+openstack-swift.spec
+python-eventlet.spec
+python-prettytable.spec
+python-sqlalchemy-migrate.spec
+start-stop-daemon.spec

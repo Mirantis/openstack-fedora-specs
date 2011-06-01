@@ -19,8 +19,6 @@ Source2:          %{name}-registry.init
 Source3:          %{name}-logging-api.conf
 Source4:          %{name}-logging-registry.conf
 
-Patch1:           %{name}-configs.patch
-
 BuildRoot:        %{_tmppath}/%{prj}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:        noarch
@@ -90,8 +88,6 @@ This package contains documentation files for OpenStack Glance.
 
 %prep
 %setup -q -n %{prj}-%{version}
-
-#%patch1 -p1
 
 %build
 %{__python} setup.py build

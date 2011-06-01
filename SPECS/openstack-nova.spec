@@ -4,9 +4,9 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-Name:             openstack-nova
+Name:             nova
 Version:          2011.3
-Release:          1087%{?dist}
+Release:          1087.1%{?dist}
 Summary:          OpenStack Compute (nova)
 Distribution:     Fedora
 Vendor:           Mirantis
@@ -15,7 +15,6 @@ Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
 Source0:          http://nova.openstack.org/tarballs/nova.tar.gz
-Source2:          %{name}-noVNC-snap2011.03.24.tgz
 Source6:          %{name}.logrotate
 
 # Initscripts
@@ -32,6 +31,7 @@ Source19:         %{name}-vncproxy.init
 Source20:         %{name}-sudoers
 Source21:         %{name}-polkit.pkla
 Source22:         %{name}-ifc-template
+
 
 BuildRoot:        %{_tmppath}/nova-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -81,6 +81,7 @@ Requires:         %{name}-volume = %{version}-%{release}
 Requires:         openstack-client
 Requires:         openstack-glance
 Requires:         rabbitmq-server
+
 %if 0%{?with_doc}
 Requires:         %{name}-doc
 %endif
@@ -124,7 +125,6 @@ Requires:         python-mox
 Requires:         python-redis
 Requires:         python-routes
 Requires:         python-sqlalchemy
-#Requires:         python-suds
 Requires:         python-tornado
 Requires:         python-twisted-core
 Requires:         python-twisted-web
@@ -274,12 +274,8 @@ BuildRequires:    python-nose
 # Required to build module documents
 BuildRequires:    python-IPy
 BuildRequires:    python-boto
-#BuildRequires:    python-carrot
-#BuildRequires:    python-daemon
 BuildRequires:    python-eventlet
 BuildRequires:    python-gflags
-#BuildRequires:    python-mox
-#BuildRequires:    python-redis
 BuildRequires:    python-routes
 BuildRequires:    python-sqlalchemy
 BuildRequires:    python-tornado
@@ -370,17 +366,13 @@ rm -fr %{buildroot}%{python_sitelib}/run_tests.*
 rm -f %{buildroot}%{_bindir}/nova-combined
 rm -f %{buildroot}/usr/share/doc/nova/README*
 
-# Add noVNC console
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/noVNC
-tar zxf %{SOURCE2} -C %{buildroot}%{_sharedstatedir}/nova/noVNC
-
 %clean
 rm -rf %{buildroot}
 
 %pre
-getent group nova >/dev/null || groupadd -r nova
+getent group nova >/dev/null || groupadd -r nova --gid 8774
 getent passwd nova >/dev/null || \
-useradd -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
+useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
 -c "OpenStack Nova Daemons" nova
 exit 0
 
@@ -559,7 +551,7 @@ fi
 
 %files compute
 %defattr(-,root,root,-)
-%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-openstack-nova.pkla
+%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
 %{_bindir}/euca-get-ajax-console
 %{_bindir}/nova-ajax-console-proxy
 %{_bindir}/nova-compute
