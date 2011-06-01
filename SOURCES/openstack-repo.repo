@@ -1,0 +1,5 @@
+[openstack-nova]
+name=OpenStack Nova Compute
+baseurl=http://download.mirantis.com/repo
+enabled=1
+gpgcheck=0
