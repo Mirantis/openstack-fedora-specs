@@ -16,6 +16,8 @@ URL:		http://code.google.com/p/sqlalchemy-migrate/
 Source0:	http://sqlalchemy-migrate.googlecode.com/files/sqlalchemy-migrate-0.6.1.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+BuildArch:      noarch
+
 BuildRequires:	python-devel python-sphinx
 Requires:	python-sqlalchemy >= 0.5
 Requires:	python-decorator

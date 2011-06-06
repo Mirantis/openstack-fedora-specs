@@ -16,6 +16,8 @@ URL:		http://code.google.com/p/prettytable/
 Source0:	http://pypi.python.org/packages/source/P/PrettyTable/prettytable-%{version}.tar.gz
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+BuildArch:      noarch
+
 BuildRequires:	python-devel python-sphinx
 
 %description
