@@ -6,8 +6,8 @@
 %endif
 
 Name:             openstack-%{prj}
-Version:          2.4.1
-Release:          3
+Version:          2.5.1
+Release:          1
 Summary:          Client for OpenStack Nova API
 Distribution:     Fedora
 
