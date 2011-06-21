@@ -40,16 +40,10 @@ The Dashboard for OpenStack is a reference Django implementation that uses the d
 pushd django-openstack
 %{__python} setup.py build
 popd
-pushd django-nova-syspanel
-%{__python} setup.py build
-popd
 
 %install
 rm -rf %{buildroot}
 pushd django-openstack
-%{__python} setup.py install -O1 --skip-build --root %{buildroot}
-popd
-pushd django-nova-syspanel
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 popd
 install -d -m 755 %{buildroot}/opt/openstack-dashboard
