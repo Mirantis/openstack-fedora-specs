@@ -27,10 +27,10 @@
 
 prog="OpenStack Glance Registry Server"
 suffix="registry"
-flgfile=/etc/glance/glance.conf
+flgfile=/etc/glance/glance-$suffix.conf
 logconf=/etc/glance/logging-$suffix.conf
 pidfile=/var/run/glance/glance-$suffix.pid
-lckfile=/var/lock/subsys/openstack-glance-$suffix
+lckfile=/var/lock/subsys/glance-$suffix
 binfile=/usr/bin/glance-$suffix
 
 start() {
@@ -47,7 +47,7 @@ start() {
 	fi
 	echo -n "Starting $prog: "
 	cd /var/lib/glance
-    /sbin/start-stop-daemon --start -b -c glance:nobody --make-pidfile --pidfile $pidfile --exec /usr/bin/glance-$suffix -- -d -v --log-config=$logconf
+    /sbin/start-stop-daemon --start -b -c glance:nobody --make-pidfile --pidfile $pidfile --exec /usr/bin/glance-$suffix -- -d -v --config-file=$flgfile
 	sleep 1
 	if [ -f "$pidfile" ]; then
 		checkpid `cat $pidfile`

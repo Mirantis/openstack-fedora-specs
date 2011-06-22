@@ -16,9 +16,8 @@ URL:              http://%{prj}.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance.tar.gz
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
-Source3:          %{name}-logging-api.conf
-Source4:          %{name}-logging-registry.conf
-Source5:          %{name}.conf
+Source3:          %{name}-api.conf
+Source4:          %{name}-registry.conf
 
 BuildRoot:        %{_tmppath}/%{prj}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -114,9 +113,8 @@ rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{prj}/images
 
 # Config file
-install -p -D -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/%{prj}/%{prj}.conf
-install -p -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/%{prj}/logging-api.conf
-install -p -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{prj}/logging-registry.conf
+install -p -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/%{prj}/glance-api.conf
+install -p -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{prj}/glance-registry.conf
 
 # Initscripts
 install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}-api
