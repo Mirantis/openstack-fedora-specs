@@ -79,7 +79,7 @@ Requires:         %{name}-objectstore = %{version}-%{release}
 Requires:         %{name}-scheduler = %{version}-%{release}
 Requires:         %{name}-volume = %{version}-%{release}
 Requires:         openstack-client
-Requires:         openstack-glance
+Requires:         glance
 Requires:         rabbitmq-server
 
 %if 0%{?with_doc}
