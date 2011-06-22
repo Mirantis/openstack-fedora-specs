@@ -6,14 +6,14 @@
 %endif
 
 Name:             openstack-%{prj}
-Version:          2011.2
+Version:          2011.3
 Release:          0.8.bzr123%{?dist}
 Summary:          OpenStack Image Registry and Delivery Service
 
 Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://%{prj}.openstack.org
-Source0:          http://glance.openstack.org/tarballs/glance-%{version}.tar.gz
+Source0:          http://glance.openstack.org/tarballs/glance.tar.gz
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
 Source3:          %{name}-logging-api.conf
@@ -87,7 +87,7 @@ This package contains documentation files for OpenStack Glance.
 %endif
 
 %prep
-%setup -q -n %{prj}-%{version}
+%setup -q -n %{prj}
 
 %build
 %{__python} setup.py build
