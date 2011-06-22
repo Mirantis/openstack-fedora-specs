@@ -160,9 +160,8 @@ fi
 %{_initrddir}/%{name}-api
 %{_initrddir}/%{name}-registry
 %defattr(-,%{prj},nobody,-)
-%config(noreplace) %{_sysconfdir}/%{prj}/%{prj}.conf
-%config(noreplace) %{_sysconfdir}/%{prj}/logging-api.conf
-%config(noreplace) %{_sysconfdir}/%{prj}/logging-registry.conf
+%config(noreplace) %{_sysconfdir}/%{prj}/%{prj}-api.conf
+%config(noreplace) %{_sysconfdir}/%{prj}/%{prj}-registry.conf
 %{_sharedstatedir}/%{prj}
 %dir %attr(0755, %{prj}, nobody) %{_localstatedir}/log/%{prj}
 %dir %attr(0755, %{prj}, nobody) %{_localstatedir}/run/%{prj}
