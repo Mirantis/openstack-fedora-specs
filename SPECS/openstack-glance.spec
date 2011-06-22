@@ -18,6 +18,7 @@ Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
 Source3:          %{name}-logging-api.conf
 Source4:          %{name}-logging-registry.conf
+Source5:          %{name}.conf
 
 BuildRoot:        %{_tmppath}/%{prj}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -113,7 +114,7 @@ rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{prj}/images
 
 # Config file
-install -p -D -m 644 etc/%{prj}.conf.sample %{buildroot}%{_sysconfdir}/%{prj}/%{prj}.conf
+install -p -D -m 644 %{SOURCE5} %{buildroot}%{_sysconfdir}/%{prj}/%{prj}.conf
 install -p -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/%{prj}/logging-api.conf
 install -p -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{prj}/logging-registry.conf
 
