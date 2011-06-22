@@ -137,15 +137,15 @@ useradd -r -g %{prj} -d %{_sharedstatedir}/%{prj} -s /sbin/nologin \
 exit 0
 
 %post
-/sbin/chkconfig --add openstack-%{prj}-api
-/sbin/chkconfig --add openstack-%{prj}-registry
+/sbin/chkconfig --add %{prj}-api
+/sbin/chkconfig --add %{prj}-registry
 
 %preun
 if [ $1 = 0 ] ; then
-    /sbin/service openstack-%{prj}-api stop
-    /sbin/chkconfig --del openstack-%{prj}-api
-    /sbin/service openstack-%{prj}-registry stop
-    /sbin/chkconfig --del openstack-%{prj}-registry
+    /sbin/service %{prj}-api stop
+    /sbin/chkconfig --del %{prj}-api
+    /sbin/service %{prj}-registry stop
+    /sbin/chkconfig --del %{prj}-registry
 fi
 
 %files
