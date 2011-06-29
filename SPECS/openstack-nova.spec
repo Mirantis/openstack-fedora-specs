@@ -527,6 +527,7 @@ fi
 %{_bindir}/nova-manage
 %{_bindir}/nova-spoolsentry
 %{_bindir}/nova-vncproxy
+%{_bindir}/instance-usage-audit
 %{_initrddir}/%{name}-vncproxy
 %{_bindir}/stack
 %{_datarootdir}/nova
