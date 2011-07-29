@@ -287,7 +287,7 @@ This package contains documentation files for %{shortname}.
 %endif
 
 %prep
-%setup -q -n nova
+%setup -q -n %{shortname}-%{version}
 
 
 %build
