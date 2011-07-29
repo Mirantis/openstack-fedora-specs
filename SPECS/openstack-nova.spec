@@ -1,6 +1,6 @@
 %define shortname nova
 %define bzrtag ~bzr1130
-%global with_doc 0
+%global with_doc 1
 
 %if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
@@ -301,12 +301,12 @@ This package contains documentation files for %{shortname}.
 rm -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
+# docs generation requires everything to be installed first
 %if 0%{?with_doc}
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 pushd doc
 sphinx-build -b html source build/html
 popd
-
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 %endif
