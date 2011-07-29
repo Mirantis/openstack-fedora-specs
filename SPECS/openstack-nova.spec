@@ -1,4 +1,5 @@
 %define shortname nova
+%define bzrtag ~bzr1130
 %global with_doc 0
 
 %if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
@@ -15,7 +16,7 @@ Vendor:           Mirantis
 Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
-Source0:          http://nova.openstack.org/tarballs/nova.tar.gz
+Source0:          http://nova.openstack.org/tarballs/nova-%{version}%{bzrtag}.tar.gz
 Source6:          %{shortname}.logrotate
 
 # Initscripts
