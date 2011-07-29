@@ -11,7 +11,7 @@ Version:          2011.3
 Release:          1087.1%{?dist}
 Summary:          OpenStack Compute (nova)
 
-Group:            Development/Languages
+Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
 Source0:          http://nova.openstack.org/tarballs/nova-%{version}%{bzrtag}.tar.gz
