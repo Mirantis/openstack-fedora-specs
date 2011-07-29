@@ -1,10 +1,11 @@
+%define shortname nova
 %global with_doc 0
 
 %if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-Name:             nova
+Name:             openstack-nova
 Version:          2011.3
 Release:          1087.1%{?dist}
 Summary:          OpenStack Compute (nova)
@@ -15,22 +16,22 @@ Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
 Source0:          http://nova.openstack.org/tarballs/nova.tar.gz
-Source6:          %{name}.logrotate
+Source6:          %{shortname}.logrotate
 
 # Initscripts
-Source11:         %{name}-api.init
-Source12:         %{name}-compute.init
-Source13:         %{name}-network.init
-Source14:         %{name}-objectstore.init
-Source15:         %{name}-scheduler.init
-Source16:         %{name}-volume.init
-Source17:         %{name}-direct-api.init
-Source18:         %{name}-ajax-console-proxy.init
-Source19:         %{name}-vncproxy.init
+Source11:         %{shortname}-api.init
+Source12:         %{shortname}-compute.init
+Source13:         %{shortname}-network.init
+Source14:         %{shortname}-objectstore.init
+Source15:         %{shortname}-scheduler.init
+Source16:         %{shortname}-volume.init
+Source17:         %{shortname}-direct-api.init
+Source18:         %{shortname}-ajax-console-proxy.init
+Source19:         %{shortname}-vncproxy.init
 
-Source20:         %{name}-sudoers
-Source21:         %{name}-polkit.pkla
-Source22:         %{name}-ifc-template
+Source20:         %{shortname}-sudoers
+Source21:         %{shortname}-polkit.pkla
+Source22:         %{shortname}-ifc-template
 
 
 BuildRoot:        %{_tmppath}/nova-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -150,7 +151,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} Python library.
+This package contains the %{shortname} Python library.
 
 %package          api
 Summary:          A nova API server
@@ -167,7 +168,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} API Server.
+This package contains the %{shortname} API Server.
 
 %package          compute
 Summary:          A nova compute server
@@ -187,7 +188,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} Compute Worker.
+This package contains the %{shortname} Compute Worker.
 
 %package          instancemonitor
 Summary:          A nova instancemonitor server
@@ -202,7 +203,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} instance monitor.
+This package contains the %{shortname} instance monitor.
 
 %package          network
 Summary:          A nova network server
@@ -217,7 +218,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} Network Controller.
+This package contains the %{shortname} Network Controller.
 
 %package          objectstore
 Summary:          A nova objectstore server
@@ -232,7 +233,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} object store server.
+This package contains the %{shortname} object store server.
 
 %package          scheduler
 Summary:          A nova scheduler server
@@ -247,7 +248,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} Scheduler.
+This package contains the %{shortname} Scheduler.
 
 %package          volume
 Summary:          A nova volume server
@@ -262,11 +263,11 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains the %{name} Volume service.
+This package contains the %{shortname} Volume service.
 
 %if 0%{?with_doc}
 %package doc
-Summary:          Documentation for %{name}
+Summary:          Documentation for %{shortname}
 Group:            Documentation
 
 BuildRequires:    python-sphinx
@@ -289,7 +290,7 @@ built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
 the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
 protocol, and the Redis KVS.
 
-This package contains documentation files for %{name}.
+This package contains documentation files for %{shortname}.
 %endif
 
 %prep
@@ -324,21 +325,21 @@ install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
 
 # Install initscripts for Nova services
-install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{name}-api
-install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{name}-compute
-install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/%{name}-network
-install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/%{name}-objectstore
-install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/%{name}-scheduler
-install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/%{name}-volume
-install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/%{name}-direct-api
-install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/%{name}-ajax-console-proxy
-install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{name}-vncproxy
+install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{shortname}-api
+install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{shortname}-compute
+install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/%{shortname}-network
+install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/%{shortname}-objectstore
+install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/%{shortname}-scheduler
+install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/%{shortname}-volume
+install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/%{shortname}-direct-api
+install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/%{shortname}-ajax-console-proxy
+install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{shortname}-vncproxy
 
 # Install sudoers
-install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/%{name}
+install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/%{shortname}
 
 # Install logrotate
-install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{shortname}
 
 # Install pid directory
 install -d -m 755 %{buildroot}%{_localstatedir}/run/nova
@@ -355,7 +356,7 @@ find %{buildroot}%{_sharedstatedir}/nova/CA -name .gitignore -delete
 find %{buildroot}%{_sharedstatedir}/nova/CA -name .placeholder -delete
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d
-install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{name}.pkla
+install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{shortname}.pkla
 
 # Fixing ajaxterm installation
 mv %{buildroot}%{_datarootdir}/nova/euca-get-ajax-console %{buildroot}%{_bindir}
@@ -414,111 +415,111 @@ fi
 # api
 
 %post api
-/sbin/chkconfig --add %{name}-api
-/sbin/chkconfig --add %{name}-direct-api
+/sbin/chkconfig --add %{shortname}-api
+/sbin/chkconfig --add %{shortname}-direct-api
 
 %preun api
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-api stop >/dev/null 2>&1
-    /sbin/service %{name}-direct-api stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-api
-    /sbin/chkconfig --del %{name}-direct-api
+    /sbin/service %{shortname}-api stop >/dev/null 2>&1
+    /sbin/service %{shortname}-direct-api stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{shortname}-api
+    /sbin/chkconfig --del %{shortname}-direct-api
 fi
 
 %postun api
 #if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-api condrestart
-#    /sbin/service %{name}-direct-api condrestart
+#    /sbin/service %{shortname}-api condrestart
+#    /sbin/service %{shortname}-direct-api condrestart
 #fi
 
 # compute
 
 %post compute
-/sbin/chkconfig --add %{name}-ajax-console-proxy
-/sbin/chkconfig --add %{name}-compute
+/sbin/chkconfig --add %{shortname}-ajax-console-proxy
+/sbin/chkconfig --add %{shortname}-compute
 
 %preun compute
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-ajax-console-proxy stop >/dev/null 2>&1
-    /sbin/service %{name}-compute stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-ajax-console-proxy
-    /sbin/chkconfig --del %{name}-compute
+    /sbin/service %{shortname}-ajax-console-proxy stop >/dev/null 2>&1
+    /sbin/service %{shortname}-compute stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{shortname}-ajax-console-proxy
+    /sbin/chkconfig --del %{shortname}-compute
 fi
 
 %postun compute
 #if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-ajax-console-proxy condrestart
-#    /sbin/service %{name}-compute condrestart
+#    /sbin/service %{shortname}-ajax-console-proxy condrestart
+#    /sbin/service %{shortname}-compute condrestart
 #fi
 
 # network
 
 %post network
-/sbin/chkconfig --add %{name}-network
+/sbin/chkconfig --add %{shortname}-network
 
 %preun network
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-network stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-network
+    /sbin/service %{shortname}-network stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{shortname}-network
 fi
 
 %postun network
 #if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-network condrestart
+#    /sbin/service %{shortname}-network condrestart
 #fi
 
 # objectstore
 
 %post objectstore
-/sbin/chkconfig --add %{name}-objectstore
+/sbin/chkconfig --add %{shortname}-objectstore
 
 %preun objectstore
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-objectstore stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-objectstore
+    /sbin/service %{shortname}-objectstore stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{shortname}-objectstore
 fi
 
 %postun objectstore
 #if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-objectstore condrestart
+#    /sbin/service %{shortname}-objectstore condrestart
 #fi
 
 # scheduler
 
 %post scheduler
-/sbin/chkconfig --add %{name}-scheduler
+/sbin/chkconfig --add %{shortname}-scheduler
 
 %preun scheduler
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-scheduler stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-scheduler
+    /sbin/service %{shortname}-scheduler stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{shortname}-scheduler
 fi
 
 %postun scheduler
 #if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-scheduler condrestart
+#    /sbin/service %{shortname}-scheduler condrestart
 #fi
 
 # volume
 
 %post volume
-/sbin/chkconfig --add %{name}-volume
+/sbin/chkconfig --add %{shortname}-volume
 
 %preun volume
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-volume stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-volume
+    /sbin/service %{shortname}-volume stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{shortname}-volume
 fi
 
 %postun volume
 #if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-volume condrestart
+#    /sbin/service %{shortname}-volume condrestart
 #fi
 
 %files
 %defattr(-,root,root,-)
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%config(noreplace) %{_sysconfdir}/sudoers.d/%{name}
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{shortname}
+%config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
 %{_bindir}/nova-console
@@ -528,7 +529,7 @@ fi
 %{_bindir}/nova-spoolsentry
 %{_bindir}/nova-vncproxy
 %{_bindir}/instance-usage-audit
-%{_initrddir}/%{name}-vncproxy
+%{_initrddir}/%{shortname}-vncproxy
 %{_bindir}/stack
 %{_datarootdir}/nova
 %defattr(-,nova,nobody,-)
@@ -543,8 +544,8 @@ fi
 
 %files api
 %defattr(-,root,root,-)
-%{_initrddir}/%{name}-api
-%{_initrddir}/%{name}-direct-api
+%{_initrddir}/%{shortname}-api
+%{_initrddir}/%{shortname}-direct-api
 %{_bindir}/nova-api
 %{_bindir}/nova-direct-api
 %defattr(-,nova,nobody,-)
@@ -556,36 +557,36 @@ fi
 %{_bindir}/euca-get-ajax-console
 %{_bindir}/nova-ajax-console-proxy
 %{_bindir}/nova-compute
-%{_initrddir}/%{name}-compute
-%{_initrddir}/%{name}-ajax-console-proxy
+%{_initrddir}/%{shortname}-compute
+%{_initrddir}/%{shortname}-ajax-console-proxy
 %{_datarootdir}/nova/ajaxterm
 
 %files instancemonitor
 %defattr(-,root,root,-)
 %{_bindir}/nova-instancemonitor
-#{_initrddir}/%{name}-instancemonitor
+#{_initrddir}/%{shortname}-instancemonitor
 
 %files network
 %defattr(-,root,root,-)
 %{_bindir}/nova-network
 %{_bindir}/nova-dhcpbridge
-%{_initrddir}/%{name}-network
+%{_initrddir}/%{shortname}-network
 
 %files objectstore
 %defattr(-,root,root,-)
 %{_bindir}/nova-import-canonical-imagestore
 %{_bindir}/nova-objectstore
-%{_initrddir}/%{name}-objectstore
+%{_initrddir}/%{shortname}-objectstore
 
 %files scheduler
 %defattr(-,root,root,-)
 %{_bindir}/nova-scheduler
-%{_initrddir}/%{name}-scheduler
+%{_initrddir}/%{shortname}-scheduler
 
 %files volume
 %defattr(-,root,root,-)
 %{_bindir}/nova-volume
-%{_initrddir}/%{name}-volume
+%{_initrddir}/%{shortname}-volume
 
 %if 0%{?with_doc}
 %files doc
