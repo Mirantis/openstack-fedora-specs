@@ -53,15 +53,14 @@ Requires(preun):  chkconfig
 Requires(pre):    shadow-utils qemu-kvm
 
 %description
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-Nova is intended to be easy to extend, and adapt. For example, it currently
-uses an LDAP server for users and groups, but also includes a fake LDAP server,
-that stores data in Redis. It has extensive test coverage, and uses the Sphinx
-toolkit (the same as Python itself) for code and user documentation.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform. It gives you the
+software, control panels, and APIs required to orchestrate a cloud,
+including running instances, managing networks, and controlling access
+through users and projects. OpenStack Compute strives to be both
+hardware and hypervisor agnostic, currently supporting a variety of
+standard hardware configurations and seven major hypervisors.
 
 %package          node-full
 Summary:          OpenStack Nova full node installation
@@ -98,6 +97,10 @@ Requires:         %{name}-compute = %{version}-%{release}
 Requires:         %{name}-instancemonitor = %{version}-%{release}
 
 %description      node-compute
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
+
 This package installs compute set of OpenStack Nova packages and Compute node
 configuration.
 
@@ -143,10 +146,9 @@ Requires:         coreutils
 Requires:         python-libguestfs
 
 %description -n   python-nova
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
 This package contains the %{shortname} Python library.
 
@@ -160,12 +162,11 @@ Requires:         python-paste
 Requires:         python-paste-deploy
 
 %description      api
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} API Server.
+This package contains the Nova API Server.
 
 %package          compute
 Summary:          A nova compute server
@@ -180,12 +181,11 @@ Requires:         python-cheetah
 Requires:         MySQL-python
 
 %description      compute
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} Compute Worker.
+This package contains the Nova Compute Worker.
 
 %package          instancemonitor
 Summary:          A nova instancemonitor server
@@ -195,12 +195,11 @@ Requires:         %{name} = %{version}-%{release}
 Requires:         start-stop-daemon
 
 %description      instancemonitor
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} instance monitor.
+This package contains the Nova instance monitor.
 
 %package          network
 Summary:          A nova network server
@@ -210,12 +209,11 @@ Requires:         %{name} = %{version}-%{release}
 Requires:         start-stop-daemon
 
 %description      network
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} Network Controller.
+This package contains the Nova Network Controller.
 
 %package          objectstore
 Summary:          A nova objectstore server
@@ -225,12 +223,11 @@ Requires:         %{name} = %{version}-%{release}
 Requires:         start-stop-daemon
 
 %description      objectstore
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} object store server.
+This package contains the Nova object store server.
 
 %package          scheduler
 Summary:          A nova scheduler server
@@ -240,12 +237,11 @@ Requires:         %{name} = %{version}-%{release}
 Requires:         start-stop-daemon
 
 %description      scheduler
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} Scheduler.
+This package contains the Nova Scheduler.
 
 %package          volume
 Summary:          A nova volume server
@@ -255,12 +251,11 @@ Requires:         %{name} = %{version}-%{release}
 Requires:         start-stop-daemon
 
 %description      volume
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} Volume service.
+This package contains the Nova Volume service.
 
 %if 0%{?with_doc}
 %package doc
@@ -282,10 +277,9 @@ BuildRequires:    python-twisted-web
 BuildRequires:    python-webob
 
 %description      doc
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
 This package contains documentation files for %{shortname}.
 %endif
