@@ -420,10 +420,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun api
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{shortname}-api condrestart
-#    /sbin/service %{shortname}-direct-api condrestart
-#fi
+if [ "$1" -ge 1 ] ; then
+    /sbin/service %{shortname}-api condrestart > /dev/null 2>&1 || :
+    /sbin/service %{shortname}-direct-api condrestart > /dev/null 2>&1 || :
+fi
 
 # compute
 
@@ -440,10 +440,10 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun compute
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{shortname}-ajax-console-proxy condrestart
-#    /sbin/service %{shortname}-compute condrestart
-#fi
+if [ "$1" -ge 1 ] ; then
+    /sbin/service %{shortname}-ajax-console-proxy condrestart > /dev/null 2>&1 || :
+    /sbin/service %{shortname}-compute condrestart > /dev/null 2>&1 || :
+fi
 
 # network
 
@@ -457,9 +457,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun network
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{shortname}-network condrestart
-#fi
+if [ "$1" -ge 1 ] ; then
+    /sbin/service %{shortname}-network condrestart > /dev/null 2>&1 || :
+fi
 
 # objectstore
 
@@ -473,9 +473,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun objectstore
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{shortname}-objectstore condrestart
-#fi
+if [ "$1" -ge 1 ] ; then
+    /sbin/service %{shortname}-objectstore condrestart > /dev/null 2>&1 || :
+fi
 
 # scheduler
 
@@ -489,9 +489,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun scheduler
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{shortname}-scheduler condrestart
-#fi
+if [ "$1" -ge 1 ] ; then
+    /sbin/service %{shortname}-scheduler condrestart > /dev/null 2>&1 || :
+fi
 
 # volume
 
@@ -505,9 +505,9 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun volume
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{shortname}-volume condrestart
-#fi
+if [ "$1" -ge 1 ] ; then
+    /sbin/service %{shortname}-volume condrestart > /dev/null 2>&1 || :
+fi
 
 %files
 %defattr(-,root,root,-)
