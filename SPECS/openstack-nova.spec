@@ -153,7 +153,7 @@ redundant and scalable cloud computing platform.
 This package contains the %{shortname} Python library.
 
 %package          api
-Summary:          A nova API server
+Summary:          A OpenStack Compute API server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -169,7 +169,7 @@ redundant and scalable cloud computing platform.
 This package contains the Nova API Server.
 
 %package          compute
-Summary:          A nova compute server
+Summary:          A OpenStack Compute compute server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -188,7 +188,7 @@ redundant and scalable cloud computing platform.
 This package contains the Nova Compute Worker.
 
 %package          instancemonitor
-Summary:          A nova instancemonitor server
+Summary:          A OpenStack Compute instancemonitor server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -202,7 +202,7 @@ redundant and scalable cloud computing platform.
 This package contains the Nova instance monitor.
 
 %package          network
-Summary:          A nova network server
+Summary:          A OpenStack Compute network server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -216,7 +216,7 @@ redundant and scalable cloud computing platform.
 This package contains the Nova Network Controller.
 
 %package          objectstore
-Summary:          A nova objectstore server
+Summary:          A OpenStack Compute objectstore server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -230,7 +230,7 @@ redundant and scalable cloud computing platform.
 This package contains the Nova object store server.
 
 %package          scheduler
-Summary:          A nova scheduler server
+Summary:          A OpenStack Compute scheduler server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -244,7 +244,7 @@ redundant and scalable cloud computing platform.
 This package contains the Nova Scheduler.
 
 %package          volume
-Summary:          A nova volume server
+Summary:          A OpenStack Compute volume server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
@@ -259,7 +259,7 @@ This package contains the Nova Volume service.
 
 %if 0%{?with_doc}
 %package doc
-Summary:          Documentation for %{shortname}
+Summary:          Documentation for OpenStack Compute
 Group:            Documentation
 
 BuildRequires:    python-sphinx
