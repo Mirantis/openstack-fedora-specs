@@ -275,6 +275,8 @@ BuildRequires:    python-tornado
 BuildRequires:    python-twisted-core
 BuildRequires:    python-twisted-web
 BuildRequires:    python-webob
+# while not strictly required, quiets the build down when building docs.
+BuildRequires:    python-carrot, python-mox, python-suds, m2crypto, bpython, python-memcached, python-migrate
 
 %description      doc
 OpenStack Compute (codename Nova) is open source software designed to
