@@ -315,12 +315,12 @@ rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 %endif
 
 # Setup directories
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/images
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/instances
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/keys
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/networks
-install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/tmp
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/images
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/instances
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/keys
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/networks
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/tmp
 install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
 
@@ -345,27 +345,27 @@ install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{shortna
 install -d -m 755 %{buildroot}%{_localstatedir}/run/nova
 
 # Install template files
-install -p -D -m 644 nova/auth/novarc.template %{buildroot}%{_datarootdir}/nova/novarc.template
-install -p -D -m 644 nova/cloudpipe/client.ovpn.template %{buildroot}%{_datarootdir}/nova/client.ovpn.template
-install -p -D -m 644 nova/virt/libvirt.xml.template %{buildroot}%{_datarootdir}/nova/libvirt.xml.template
-install -p -D -m 644 nova/virt/interfaces.template %{buildroot}%{_datarootdir}/nova/interfaces.template
-install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/nova/interfaces.template
+install -p -D -m 644 %{shortname}/auth/novarc.template %{buildroot}%{_datarootdir}/%{shortname}/novarc.template
+install -p -D -m 644 %{shortname}/cloudpipe/client.ovpn.template %{buildroot}%{_datarootdir}/%{shortname}/client.ovpn.template
+install -p -D -m 644 %{shortname}/virt/libvirt.xml.template %{buildroot}%{_datarootdir}/%{shortname}/libvirt.xml.template
+install -p -D -m 644 %{shortname}/virt/interfaces.template %{buildroot}%{_datarootdir}/%{shortname}/interfaces.template
+install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/%{shortname}/interfaces.template
 
 # Clean CA directory
-find %{buildroot}%{_sharedstatedir}/nova/CA -name .gitignore -delete
-find %{buildroot}%{_sharedstatedir}/nova/CA -name .placeholder -delete
+find %{buildroot}%{_sharedstatedir}/%{shortname}/CA -name .gitignore -delete
+find %{buildroot}%{_sharedstatedir}/%{shortname}/CA -name .placeholder -delete
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d
 install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{shortname}.pkla
 
 # Fixing ajaxterm installation
-mv %{buildroot}%{_datarootdir}/nova/euca-get-ajax-console %{buildroot}%{_bindir}
-rm -fr %{buildroot}%{_datarootdir}/nova/{install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx} %{buildroot}%{_datarootdir}/nova/ajaxterm/configure*
+mv %{buildroot}%{_datarootdir}/%{shortname}/euca-get-ajax-console %{buildroot}%{_bindir}
+rm -fr %{buildroot}%{_datarootdir}/%{shortname}/{install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx} %{buildroot}%{_datarootdir}/%{shortname}/ajaxterm/configure*
 
 # Remove unneeded in production stuff
 rm -fr %{buildroot}%{python_sitelib}/run_tests.*
 rm -f %{buildroot}%{_bindir}/nova-combined
-rm -f %{buildroot}/usr/share/doc/nova/README*
+rm -f %{buildroot}/usr/share/doc/%{shortname}/README*
 
 %clean
 rm -rf %{buildroot}
@@ -399,7 +399,7 @@ if rpmquery openstack-nova-cc-config 1>&2 >/dev/null; then
 	# Database init/migration
 	if [ $1 -gt 1 ]; then
 		current_version=$(nova-manage db version 2>/dev/null)
-		updated_version=$(cd %{python_sitelib}/nova/db/sqlalchemy/migrate_repo; %{__python} manage.py version)
+		updated_version=$(cd %{python_sitelib}/%{shortname}/db/sqlalchemy/migrate_repo; %{__python} manage.py version)
 		if [ "$current_version" -ne "$updated_version" ]; then
 			echo "Performing Nova database upgrade"
 			/usr/bin/nova-manage db sync
@@ -549,7 +549,7 @@ fi
 %{_bindir}/nova-api
 %{_bindir}/nova-direct-api
 %defattr(-,nova,nobody,-)
-%config(noreplace) %{_sysconfdir}/nova/api-paste.ini
+%config(noreplace) %{_sysconfdir}/%{shortname}/api-paste.ini
 
 %files compute
 %defattr(-,root,root,-)
@@ -559,7 +559,7 @@ fi
 %{_bindir}/nova-compute
 %{_initrddir}/%{shortname}-compute
 %{_initrddir}/%{shortname}-ajax-console-proxy
-%{_datarootdir}/nova/ajaxterm
+%{_datarootdir}/%{shortname}/ajaxterm
 
 %files instancemonitor
 %defattr(-,root,root,-)
