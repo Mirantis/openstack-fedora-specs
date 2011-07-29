@@ -10,8 +10,6 @@ Name:             openstack-nova
 Version:          2011.3
 Release:          1087.1%{?dist}
 Summary:          OpenStack Compute (nova)
-Distribution:     Fedora
-Vendor:           Mirantis
 
 Group:            Development/Languages
 License:          ASL 2.0
@@ -53,8 +51,6 @@ Requires(post):   chkconfig grep sudo libselinux-utils
 Requires(postun): initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils qemu-kvm
-
-Packager:         "Mirantis Inc." <openstack-support@mirantis.com>
 
 %description
 Nova is a cloud computing fabric controller (the main part of an IaaS system)
