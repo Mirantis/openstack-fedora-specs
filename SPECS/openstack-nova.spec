@@ -597,3 +597,6 @@ fi
 %files node-compute
 
 %changelog
+* Wed Jun 29 2011 Matt Domsch <mdomsch@fedoraproject.org> - 2011.3-1087.1
+- Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
+  with cleanups by Matt Domsch
