@@ -88,7 +88,6 @@ This package contains documentation files for %{shortname}.
 %{__python} setup.py build
 
 %install
-rm -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 # Delete tests
