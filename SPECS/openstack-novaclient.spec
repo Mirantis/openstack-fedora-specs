@@ -15,7 +15,6 @@ BuildRoot:        %{_tmppath}/%{prj}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:        noarch
 BuildRequires:    python-devel
 BuildRequires:    python-setuptools
-BuildRequires:    python-nose
 
 Requires:         python-novaclient = %{version}-%{release}
 
