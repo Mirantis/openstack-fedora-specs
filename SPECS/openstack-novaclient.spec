@@ -82,3 +82,8 @@ rm -fr html/.doctrees html/.buildinfo
 
 %files doc
 %doc html
+
+%changelog
+* Mon Aug  8 2011 Mark McLoughlin <markmc@redhat.com> - 2.5.1-1
+- Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
+  with cleanups by Mark McLoughlin
