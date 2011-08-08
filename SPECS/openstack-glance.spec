@@ -10,7 +10,7 @@ Version:          2011.3
 Release:          141%{?dist}
 Summary:          OpenStack Image Registry and Delivery Service
 
-Group:            Development/Languages
+Group:            Applications/System
 License:          ASL 2.0
 URL:              http://%{shortname}.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{bzrtag}.tar.gz
