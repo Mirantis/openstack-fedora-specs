@@ -1,4 +1,5 @@
 %define shortname glance
+%define bzrtag ~d4~20110805.967
 %global with_doc 0
 
 %if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
@@ -13,7 +14,7 @@ Summary:          OpenStack Image Registry and Delivery Service
 Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://%{shortname}.openstack.org
-Source0:          http://glance.openstack.org/tarballs/glance.tar.gz
+Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{bzrtag}.tar.gz
 Source1:          %{shortname}-api.init
 Source2:          %{shortname}-registry.init
 Source3:          %{shortname}-api.conf
