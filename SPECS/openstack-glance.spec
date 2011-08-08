@@ -119,9 +119,6 @@ install -d -m 755 %{buildroot}%{_localstatedir}/run/%{shortname}
 # Install log directory
 install -d -m 755 %{buildroot}%{_localstatedir}/log/%{shortname}
 
-%clean
-rm -rf %{buildroot}
-
 %pre
 getent group %{shortname} >/dev/null || groupadd -r %{shortname}
 getent passwd %{shortname} >/dev/null || \
