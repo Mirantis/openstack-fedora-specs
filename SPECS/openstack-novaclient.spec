@@ -3,7 +3,6 @@ Name:             openstack-novaclient
 Version:          2.5.1
 Release:          1
 Summary:          Client for OpenStack Nova API
-Distribution:     Fedora
 
 Group:            Applications/System
 License:          ASL 2.0
