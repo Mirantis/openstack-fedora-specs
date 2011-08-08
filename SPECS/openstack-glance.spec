@@ -164,3 +164,6 @@ fi
 %doc doc/build/html
 
 %changelog
+* Mon Aug  8 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.967bzr
+- Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
+  with cleanups by Mark McLoughlin
