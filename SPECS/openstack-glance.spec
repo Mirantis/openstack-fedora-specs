@@ -1,6 +1,5 @@
 %define shortname glance
 %define bzrtag ~d4~20110805.967
-%global with_doc 0
 
 %if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
@@ -62,13 +61,15 @@ querying of VM image metadata as well as retrieval of the actual image.
 
 This package contains the project's Python library.
 
-%if 0%{?with_doc}
 %package doc
 Summary:          Documentation for OpenStack Glance
 Group:            Documentation
 
+Requires:         %{name} = %{version}-%{release}
+
 BuildRequires:    python-sphinx
-BuildRequires:    python-nose
+BuildRequires:    graphviz
+
 # Required to build module documents
 BuildRequires:    python-boto
 BuildRequires:    python-daemon
@@ -85,8 +86,6 @@ querying of VM image metadata as well as retrieval of the actual image.
 
 This package contains documentation files for OpenStack Glance.
 
-%endif
-
 %prep
 %setup -q -n %{shortname}-%{version}
 
@@ -100,7 +99,6 @@ rm -rf %{buildroot}
 # Delete tests
 rm -fr %{buildroot}%{python_sitelib}/tests
 
-%if 0%{?with_doc}
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 pushd doc
 sphinx-build -b html source build/html
@@ -108,7 +106,6 @@ popd
 
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
-%endif
 
 # Setup directories
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/images
@@ -172,14 +169,12 @@ fi
 %dir %attr(0755, %{shortname}, nobody) %{_localstatedir}/run/%{shortname}
 
 %files -n python-%{shortname}
+%doc README
 %{python_sitelib}/%{shortname}
 %{python_sitelib}/%{shortname}-%{version}-*.egg-info
 
-%if 0%{?with_doc}
 %files doc
 %defattr(-,root,root,-)
-%doc ChangeLog
 %doc doc/build/html
-%endif
 
 %changelog
