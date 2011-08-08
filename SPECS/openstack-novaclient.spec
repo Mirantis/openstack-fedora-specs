@@ -76,15 +76,12 @@ sphinx-build -b html docs html
 rm -fr html/.doctrees html/.buildinfo
 
 %files
-%defattr(-,root,root,-)
 %{_bindir}/nova
 
 %files -n python-novaclient
-%defattr(-,root,root,-)
 %doc README.rst
 %{python_sitelib}/novaclient
 %{python_sitelib}/*.egg-info
 
-%defattr(-,root,root,-)
 %files doc
 %doc html
