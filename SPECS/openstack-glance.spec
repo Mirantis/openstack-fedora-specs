@@ -8,7 +8,7 @@
 Name:             openstack-glance
 Version:          2011.3
 Release:          141%{?dist}
-Summary:          OpenStack Image Registry and Delivery Service
+Summary:          OpenStack Image Service
 
 Group:            Applications/System
 License:          ASL 2.0
@@ -64,7 +64,7 @@ and delivery services for virtual disk images.
 This package contains the %{shortname} Python library.
 
 %package doc
-Summary:          Documentation for OpenStack Glance
+Summary:          Documentation for OpenStack Image Service
 Group:            Documentation
 
 Requires:         %{name} = %{version}-%{release}
