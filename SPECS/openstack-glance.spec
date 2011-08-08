@@ -1,10 +1,6 @@
 %define shortname glance
 %define bzrtag ~d4~20110805.967
 
-%if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%endif
-
 Name:             openstack-glance
 Version:          2011.3
 Release:          141%{?dist}
