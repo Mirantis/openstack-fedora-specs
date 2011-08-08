@@ -32,12 +32,15 @@ Requires(pre):    shadow-utils
 Requires:         python-%{shortname} = %{version}-%{release}
 
 %description
-The Glance project provides services for discovering, registering, and
-retrieving virtual machine images. Glance has a RESTful API that allows
-querying of VM image metadata as well as retrieval of the actual image.
+OpenStack Image Service (code-named Glance) provides discovery, registration,
+and delivery services for virtual disk images. The Image Service API server
+provides a standard REST interface for querying information about virtual disk
+images stored in a variety of back-end stores, including OpenStack Object
+Storage. Clients can register new virtual disk images with the Image Service,
+query for information on publicly available disk images, and use the Image
+Service's client library for streaming virtual disk images.
 
-This package contains the API server and a reference implementation registry
-server, along with a client library.
+This package contains the API and registry servers.
 
 %package -n       python-%{shortname}
 Summary:          Glance Python libraries
@@ -55,11 +58,10 @@ Requires:         python-sqlalchemy
 Requires:         python-webob
 
 %description -n   python-%{shortname}
-The Glance project provides services for discovering, registering, and
-retrieving virtual machine images. Glance has a RESTful API that allows
-querying of VM image metadata as well as retrieval of the actual image.
+OpenStack Image Service (code-named Glance) provides discovery, registration,
+and delivery services for virtual disk images.
 
-This package contains the project's Python library.
+This package contains the %{shortname} Python library.
 
 %package doc
 Summary:          Documentation for OpenStack Glance
@@ -80,11 +82,10 @@ BuildRequires:    python-sqlalchemy
 BuildRequires:    python-webob
 
 %description      doc
-The Glance project provides services for discovering, registering, and
-retrieving virtual machine images. Glance has a RESTful API that allows
-querying of VM image metadata as well as retrieval of the actual image.
+OpenStack Image Service (code-named Glance) provides discovery, registration,
+and delivery services for virtual disk images.
 
-This package contains documentation files for OpenStack Glance.
+This package contains documentation files for %{shortname}.
 
 %prep
 %setup -q -n %{shortname}-%{version}
