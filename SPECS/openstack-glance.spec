@@ -18,7 +18,7 @@ BuildRequires:    python-devel
 BuildRequires:    python-setuptools
 
 Requires(post):   chkconfig
-Requires(postun): initscripts
+Requires(preun):  initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils
 Requires:         python-%{shortname} = %{version}-%{release}
