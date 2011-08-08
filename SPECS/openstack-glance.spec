@@ -153,6 +153,7 @@ fi
 %{_bindir}/%{shortname}-scrubber
 %{_initrddir}/%{name}-api
 %{_initrddir}/%{name}-registry
+%dir %{_sysconfdir}/glance
 %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-api.conf
 %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
 %dir %attr(0755, %{shortname}, nobody) %{_sharedstatedir}/%{shortname}
