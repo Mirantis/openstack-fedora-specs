@@ -138,7 +138,6 @@ if [ $1 = 0 ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %doc README
 %{_bindir}/%{shortname}
 %{_bindir}/%{shortname}-api
@@ -165,7 +164,6 @@ fi
 %{python_sitelib}/%{shortname}-%{version}-*.egg-info
 
 %files doc
-%defattr(-,root,root,-)
 %doc doc/build/html
 
 %changelog
