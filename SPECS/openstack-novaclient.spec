@@ -1,7 +1,7 @@
 
 Name:             openstack-novaclient
 Version:          2.5.1
-Release:          1
+Release:          1%{?dist}
 Summary:          Client for OpenStack Nova API
 
 Group:            Applications/System
