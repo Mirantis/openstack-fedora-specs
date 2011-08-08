@@ -153,10 +153,9 @@ fi
 %{_bindir}/%{shortname}-scrubber
 %{_initrddir}/%{name}-api
 %{_initrddir}/%{name}-registry
-%defattr(-,%{shortname},nobody,-)
 %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-api.conf
 %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
-%{_sharedstatedir}/%{shortname}
+%dir %attr(0755, %{shortname}, nobody) %{_sharedstatedir}/%{shortname}
 %dir %attr(0755, %{shortname}, nobody) %{_localstatedir}/log/%{shortname}
 %dir %attr(0755, %{shortname}, nobody) %{_localstatedir}/run/%{shortname}
 
