@@ -65,7 +65,6 @@ This package contains auto-generated documentation.
 %{__python} setup.py build
 
 %install
-rm -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 # Delete tests
@@ -76,9 +75,6 @@ sphinx-build -b html docs html
 
 # Fix hidden-file-or-dir warnings
 rm -fr html/.doctrees html/.buildinfo
-
-%clean
-rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
