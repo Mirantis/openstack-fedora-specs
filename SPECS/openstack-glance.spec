@@ -1,15 +1,16 @@
 %define shortname glance
-%define bzrtag ~d4~20110805.967
+%define bzrtag 967
+%define snaptag ~d4~20110805.%{bzrtag}
 
 Name:             openstack-glance
 Version:          2011.3
-Release:          141%{?dist}
+Release:          0.1.%{bzrtag}bzr%{?dist}
 Summary:          OpenStack Image Service
 
 Group:            Applications/System
 License:          ASL 2.0
 URL:              http://%{shortname}.openstack.org
-Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{bzrtag}.tar.gz
+Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{snaptag}.tar.gz
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
 
