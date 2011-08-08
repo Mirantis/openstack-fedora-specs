@@ -88,7 +88,7 @@ This package contains documentation files for OpenStack Glance.
 %endif
 
 %prep
-%setup -q -n %{shortname}
+%setup -q -n %{shortname}-%{version}
 
 %build
 %{__python} setup.py build
