@@ -9,8 +9,6 @@ License:          ASL 2.0
 URL:              http://pypi.python.org/pypi/python-novaclient
 Source0:          http://pypi.python.org/packages/source/p/python-novaclient/python-novaclient-%{version}.tar.gz
 
-BuildRoot:        %{_tmppath}/%{prj}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 BuildArch:        noarch
 BuildRequires:    python-devel
 BuildRequires:    python-setuptools
