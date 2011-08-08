@@ -38,13 +38,7 @@ This package contains the API and registry servers.
 Summary:          Glance Python libraries
 Group:            Applications/System
 
-Requires:         python-anyjson
-Requires:         python-argparse
-Requires:         python-daemon
 Requires:         python-eventlet
-Requires:         python-gflags
-Requires:         python-lockfile
-Requires:         python-mox
 Requires:         python-routes
 Requires:         python-sqlalchemy
 Requires:         python-webob
