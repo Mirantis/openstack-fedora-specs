@@ -15,8 +15,6 @@ Source2:          %{shortname}-registry.init
 Source3:          %{shortname}-api.conf
 Source4:          %{shortname}-registry.conf
 
-BuildRoot:        %{_tmppath}/%{shortname}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 BuildArch:        noarch
 BuildRequires:    python-devel
 BuildRequires:    python-setuptools
