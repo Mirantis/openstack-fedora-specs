@@ -12,8 +12,6 @@ URL:              http://%{shortname}.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{bzrtag}.tar.gz
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
-Source3:          %{shortname}-api.conf
-Source4:          %{shortname}-registry.conf
 
 BuildArch:        noarch
 BuildRequires:    python-devel
@@ -84,6 +82,8 @@ This package contains documentation files for %{shortname}.
 %prep
 %setup -q -n %{shortname}-%{version}
 
+sed -i 's|\(sql_connection = sqlite://\)\(/glance.sqlite\)|\1%{_sharedstatedir}/%{shortname}\2|' etc/%{shortname}-registry.conf
+
 %build
 %{__python} setup.py build
 
@@ -105,8 +105,8 @@ rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/images
 
 # Config file
-install -p -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-api.conf
-install -p -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
+install -p -D -m 644 etc/%{shortname}-api.conf %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-api.conf
+install -p -D -m 644 etc/%{shortname}-registry.conf %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
 
 # Initscripts
 install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}-api
