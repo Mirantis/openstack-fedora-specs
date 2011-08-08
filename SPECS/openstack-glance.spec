@@ -84,6 +84,8 @@ This package contains documentation files for %{shortname}.
 
 sed -i 's|\(sql_connection = sqlite://\)\(/glance.sqlite\)|\1%{_sharedstatedir}/%{shortname}\2|' etc/%{shortname}-registry.conf
 
+sed -i '/\/usr\/bin\/env python/d' glance/common/config.py glance/registry/db/migrate_repo/manage.py
+
 %build
 %{__python} setup.py build
 
