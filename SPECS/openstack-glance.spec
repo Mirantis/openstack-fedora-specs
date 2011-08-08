@@ -10,8 +10,8 @@ Group:            Applications/System
 License:          ASL 2.0
 URL:              http://%{shortname}.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{bzrtag}.tar.gz
-Source1:          %{shortname}-api.init
-Source2:          %{shortname}-registry.init
+Source1:          %{name}-api.init
+Source2:          %{name}-registry.init
 Source3:          %{shortname}-api.conf
 Source4:          %{shortname}-registry.conf
 
@@ -109,8 +109,8 @@ install -p -D -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/%{shortname}/%{shortn
 install -p -D -m 644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
 
 # Initscripts
-install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{shortname}-api
-install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/%{shortname}-registry
+install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}-api
+install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/%{name}-registry
 
 # Install pid directory
 install -d -m 755 %{buildroot}%{_localstatedir}/run/%{shortname}
@@ -126,15 +126,15 @@ useradd -r -g %{shortname} -d %{_sharedstatedir}/%{shortname} -s /sbin/nologin \
 exit 0
 
 %post
-/sbin/chkconfig --add %{shortname}-api
-/sbin/chkconfig --add %{shortname}-registry
+/sbin/chkconfig --add %{name}-api
+/sbin/chkconfig --add %{name}-registry
 
 %preun
 if [ $1 = 0 ] ; then
-    /sbin/service %{shortname}-api stop
-    /sbin/chkconfig --del %{shortname}-api
-    /sbin/service %{shortname}-registry stop
-    /sbin/chkconfig --del %{shortname}-registry
+    /sbin/service %{name}-api stop
+    /sbin/chkconfig --del %{name}-api
+    /sbin/service %{name}-registry stop
+    /sbin/chkconfig --del %{name}-registry
 fi
 
 %files
@@ -149,8 +149,8 @@ fi
 %{_bindir}/%{shortname}-cache-pruner
 %{_bindir}/%{shortname}-cache-reaper
 %{_bindir}/%{shortname}-scrubber
-%{_initrddir}/%{shortname}-api
-%{_initrddir}/%{shortname}-registry
+%{_initrddir}/%{name}-api
+%{_initrddir}/%{name}-registry
 %defattr(-,%{shortname},nobody,-)
 %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-api.conf
 %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
