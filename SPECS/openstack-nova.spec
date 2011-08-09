@@ -268,6 +268,8 @@ This package contains documentation files for %{shortname}.
 
 find . \( -name .gitignore -o -name .placeholder \) -delete
 
+find nova -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
+
 %build
 %{__python} setup.py build
 
