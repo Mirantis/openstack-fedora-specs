@@ -40,7 +40,7 @@ Requires:         python-nova = %{version}-%{release}
 Requires:         sudo
 Requires:         euca2ools
 
-Requires(post):   chkconfig libselinux-utils
+Requires(post):   chkconfig
 Requires(postun): initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils qemu-kvm
@@ -360,18 +360,6 @@ useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s 
 exit 0
 
 %post
-if /usr/sbin/selinuxenabled; then
-	echo -e "\033[47m\033[1;31m***************************************************\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m >> \033[5mYou have SELinux enabled on your host !\033[25m <<  \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31mPlease disable it by setting \`SELINUX=disabled' \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31min /etc/sysconfig/selinux and don't forget      \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31mto reboot your host to apply that change!       \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m***************************************************\033[0m"
-fi
-
 if rpmquery openstack-nova-cc-config 1>&2 >/dev/null; then
 	# Cloud controller node detected, assuming that is contains database
 	
