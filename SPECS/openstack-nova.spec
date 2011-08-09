@@ -499,7 +499,6 @@ if [ "$1" -ge 1 ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %doc LICENSE
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{shortname}
 %config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
@@ -524,7 +523,6 @@ fi
 %{python_sitelib}/nova-%{version}-*.egg-info
 
 %files api
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_initrddir}/%{shortname}-api
 %{_initrddir}/%{shortname}-direct-api
@@ -534,7 +532,6 @@ fi
 %config(noreplace) %{_sysconfdir}/%{shortname}/api-paste.ini
 
 %files compute
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
 %{_bindir}/euca-get-ajax-console
@@ -545,39 +542,33 @@ fi
 %{_datarootdir}/%{shortname}/ajaxterm
 
 %files instancemonitor
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_bindir}/nova-instancemonitor
 
 %files network
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_bindir}/nova-network
 %{_bindir}/nova-dhcpbridge
 %{_initrddir}/%{shortname}-network
 
 %files objectstore
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_bindir}/nova-import-canonical-imagestore
 %{_bindir}/nova-objectstore
 %{_initrddir}/%{shortname}-objectstore
 
 %files scheduler
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_bindir}/nova-scheduler
 %{_initrddir}/%{shortname}-scheduler
 
 %files volume
-%defattr(-,root,root,-)
 %doc LICENSE
 %{_bindir}/nova-volume
 %{_initrddir}/%{shortname}-volume
 
 %if 0%{?with_doc}
 %files doc
-%defattr(-,root,root,-)
 %doc LICENSE doc/build/html
 %endif
 
