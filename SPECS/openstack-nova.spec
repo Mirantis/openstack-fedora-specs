@@ -473,8 +473,7 @@ fi
 %{_initrddir}/%{name}-vncproxy
 %{_bindir}/stack
 %{_datarootdir}/nova
-%defattr(-,nova,nobody,-)
-%{_sharedstatedir}/nova
+%attr(-, nova, nobody) %{_sharedstatedir}/nova
 
 %files -n python-nova
 %defattr(-,root,root,-)
@@ -488,8 +487,7 @@ fi
 %{_initrddir}/%{name}-direct-api
 %{_bindir}/nova-api
 %{_bindir}/nova-direct-api
-%defattr(-,nova,nobody,-)
-%config(noreplace) %{_sysconfdir}/%{shortname}/api-paste.ini
+%config(noreplace) %attr(-, nova, nobody) %{_sysconfdir}/%{shortname}/api-paste.ini
 
 %files compute
 %doc LICENSE
