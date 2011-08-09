@@ -40,7 +40,7 @@ Requires:         python-nova = %{version}-%{release}
 Requires:         sudo
 Requires:         euca2ools
 
-Requires(post):   chkconfig grep sudo libselinux-utils
+Requires(post):   chkconfig libselinux-utils
 Requires(postun): initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils qemu-kvm
@@ -360,9 +360,6 @@ useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s 
 exit 0
 
 %post
-if ! grep -F '#includedir /etc/sudoers.d' /etc/sudoers 2>&1 >/dev/null; then
-        echo '#includedir /etc/sudoers.d' >> /etc/sudoers
-fi
 if /usr/sbin/selinuxenabled; then
 	echo -e "\033[47m\033[1;31m***************************************************\033[0m"
 	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
