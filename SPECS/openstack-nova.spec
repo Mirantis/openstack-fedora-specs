@@ -359,28 +359,6 @@ useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s 
 -c "OpenStack Nova Daemons" nova
 exit 0
 
-%post
-if rpmquery openstack-nova-cc-config 1>&2 >/dev/null; then
-	# Cloud controller node detected, assuming that is contains database
-	
-	# Database init/migration
-	if [ $1 -gt 1 ]; then
-		current_version=$(nova-manage db version 2>/dev/null)
-		updated_version=$(cd %{python_sitelib}/%{shortname}/db/sqlalchemy/migrate_repo; %{__python} manage.py version)
-		if [ "$current_version" -ne "$updated_version" ]; then
-			echo "Performing Nova database upgrade"
-			/usr/bin/nova-manage db sync
-		fi
-# NOTE: Bullshit, what if I want use mysql or postgres instead default sqlite?
-#	else
-#		echo "DB init code, new installation"
-#		/usr/bin/nova-manage db sync
-#		echo "Please refer http://wiki.openstack.org/NovaInstall/RHEL6Notes for instructions"
-	fi
-fi
-
-# api
-
 %post api
 /sbin/chkconfig --add %{shortname}-api
 /sbin/chkconfig --add %{shortname}-direct-api
