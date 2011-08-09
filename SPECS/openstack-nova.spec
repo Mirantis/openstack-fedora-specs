@@ -1,16 +1,16 @@
 %define shortname nova
-%define bzrtag ~bzr1130
+%define bzrtag bzr1130
 %global with_doc 1
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          1087.1%{?dist}
+Release:          0.1.%{bzrtag}%{?dist}
 Summary:          OpenStack Compute (nova)
 
 Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
-Source0:          http://nova.openstack.org/tarballs/nova-%{version}%{bzrtag}.tar.gz
+Source0:          http://nova.openstack.org/tarballs/nova-%{version}~%{bzrtag}.tar.gz
 Source1:          %{shortname}.conf
 Source6:          %{shortname}.logrotate
 
@@ -543,6 +543,10 @@ fi
 %files node-compute
 
 %changelog
+* Tue Aug  9 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.bzr1130
+- More cleanups
+- Change release tag to reflect pre-release status
+
 * Wed Jun 29 2011 Matt Domsch <mdomsch@fedoraproject.org> - 2011.3-1087.1
 - Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
   with cleanups by Matt Domsch
