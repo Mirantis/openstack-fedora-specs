@@ -2,10 +2,6 @@
 %define bzrtag ~bzr1130
 %global with_doc 1
 
-%if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%endif
-
 Name:             openstack-nova
 Version:          2011.3
 Release:          1087.1%{?dist}
