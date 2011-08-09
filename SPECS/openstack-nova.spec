@@ -266,6 +266,7 @@ This package contains documentation files for %{shortname}.
 %prep
 %setup -q -n %{shortname}-%{version}
 
+find . \( -name .gitignore -o -name .placeholder \) -delete
 
 %build
 %{__python} setup.py build
@@ -321,10 +322,6 @@ install -p -D -m 644 %{shortname}/cloudpipe/client.ovpn.template %{buildroot}%{_
 install -p -D -m 644 %{shortname}/virt/libvirt.xml.template %{buildroot}%{_datarootdir}/%{shortname}/libvirt.xml.template
 install -p -D -m 644 %{shortname}/virt/interfaces.template %{buildroot}%{_datarootdir}/%{shortname}/interfaces.template
 install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/%{shortname}/interfaces.template
-
-# Clean CA directory
-find %{buildroot}%{_sharedstatedir}/%{shortname}/CA -name .gitignore -delete
-find %{buildroot}%{_sharedstatedir}/%{shortname}/CA -name .placeholder -delete
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d
 install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{shortname}.pkla
