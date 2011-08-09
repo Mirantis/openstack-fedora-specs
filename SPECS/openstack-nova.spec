@@ -317,7 +317,7 @@ install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{name}-vncproxy
 install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/%{shortname}
 
 # Install logrotate
-install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{shortname}
+install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 # Install pid directory
 install -d -m 755 %{buildroot}%{_localstatedir}/run/nova
@@ -467,7 +467,7 @@ fi
 %doc LICENSE
 %dir %{_sysconfdir}/nova
 %config(noreplace) %{_sysconfdir}/nova/nova.conf
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{shortname}
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
