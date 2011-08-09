@@ -28,9 +28,6 @@ Source20:         %{shortname}-sudoers
 Source21:         %{shortname}-polkit.pkla
 Source22:         %{shortname}-ifc-template
 
-
-BuildRoot:        %{_tmppath}/nova-%{version}-%{release}-root-%(%{__id_u} -n)
-
 BuildArch:        noarch
 BuildRequires:    intltool
 BuildRequires:    python-devel
@@ -290,7 +287,6 @@ This package contains documentation files for %{shortname}.
 %{__python} setup.py build
 
 %install
-rm -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 # docs generation requires everything to be installed first
@@ -355,9 +351,6 @@ rm -fr %{buildroot}%{_datarootdir}/%{shortname}/{install_venv.py,nova-debug,pip-
 rm -fr %{buildroot}%{python_sitelib}/run_tests.*
 rm -f %{buildroot}%{_bindir}/nova-combined
 rm -f %{buildroot}/usr/share/doc/%{shortname}/README*
-
-%clean
-rm -rf %{buildroot}
 
 %pre
 getent group nova >/dev/null || groupadd -r nova --gid 8774
