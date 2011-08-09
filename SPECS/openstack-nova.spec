@@ -1,6 +1,5 @@
 %define shortname nova
 %define bzrtag bzr1130
-%global with_doc 1
 
 Name:             openstack-nova
 Version:          2011.3
@@ -70,10 +69,6 @@ Requires:         %{name}-volume = %{version}-%{release}
 Requires:         openstack-client
 Requires:         glance
 Requires:         rabbitmq-server
-
-%if 0%{?with_doc}
-Requires:         %{name}-doc
-%endif
 
 %description      node-full
 This package installs full set of OpenStack Nova Cloud Controller packages.
@@ -239,10 +234,11 @@ redundant and scalable cloud computing platform.
 
 This package contains the Nova Volume service.
 
-%if 0%{?with_doc}
 %package doc
 Summary:          Documentation for OpenStack Compute
 Group:            Documentation
+
+Requires:         %{name} = %{version}-%{release}
 
 BuildRequires:    python-sphinx
 BuildRequires:    python-nose
@@ -266,7 +262,6 @@ provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
 This package contains documentation files for %{shortname}.
-%endif
 
 %prep
 %setup -q -n %{shortname}-%{version}
@@ -279,14 +274,12 @@ This package contains documentation files for %{shortname}.
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 # docs generation requires everything to be installed first
-%if 0%{?with_doc}
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 pushd doc
 sphinx-build -b html source build/html
 popd
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
-%endif
 
 # Setup directories
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}
@@ -534,10 +527,8 @@ fi
 %{_bindir}/nova-volume
 %{_initrddir}/%{name}-volume
 
-%if 0%{?with_doc}
 %files doc
 %doc LICENSE doc/build/html
-%endif
 
 %files node-full
 
