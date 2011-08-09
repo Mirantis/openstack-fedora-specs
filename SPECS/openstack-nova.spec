@@ -11,6 +11,7 @@ Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
 Source0:          http://nova.openstack.org/tarballs/nova-%{version}%{bzrtag}.tar.gz
+Source1:          %{shortname}.conf
 Source6:          %{shortname}.logrotate
 
 # Initscripts
@@ -60,7 +61,6 @@ Summary:          OpenStack Nova full node installation
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         %{name}-cc-config = %{version}
 Requires:         %{name}-api = %{version}-%{release}
 Requires:         %{name}-compute = %{version}-%{release}
 Requires:         %{name}-instancemonitor = %{version}-%{release}
@@ -77,15 +77,13 @@ Requires:         %{name}-doc
 %endif
 
 %description      node-full
-This package installs full set of OpenStack Nova packages and Cloud Controller
-configuration.
+This package installs full set of OpenStack Nova Cloud Controller packages.
 
 %package          node-compute
 Summary:          OpenStack Nova compute node installation
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         %{name}-compute-config = %{version}
 Requires:         %{name}-compute = %{version}-%{release}
 Requires:         %{name}-instancemonitor = %{version}-%{release}
 
@@ -94,8 +92,7 @@ OpenStack Compute (codename Nova) is open source software designed to
 provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
-This package installs compute set of OpenStack Nova packages and Compute node
-configuration.
+This package installs compute set of OpenStack Nova packages.
 
 %package -n       python-nova
 Summary:          Nova Python libraries
@@ -309,6 +306,10 @@ install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/tmp
 install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
 
+# Install config file
+install -d -m 750 %{buildroot}%{_sysconfdir}/nova
+install -p -D -m 640 %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
+
 # Install initscripts for Nova services
 install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{shortname}-api
 install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{shortname}-compute
@@ -463,6 +464,8 @@ fi
 
 %files
 %doc LICENSE
+%dir %{_sysconfdir}/nova
+%config(noreplace) %{_sysconfdir}/nova/nova.conf
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{shortname}
 %config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
