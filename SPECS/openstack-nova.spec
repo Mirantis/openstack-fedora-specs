@@ -1,15 +1,16 @@
 %define shortname nova
-%define bzrtag bzr1130
+%define bzrtag 1409
+%define snaptag ~d4~20110809.%{bzrtag}
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          0.1.%{bzrtag}%{?dist}
+Release:          0.2.%{bzrtag}bzr%{?dist}
 Summary:          OpenStack Compute (nova)
 
 Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
-Source0:          http://nova.openstack.org/tarballs/nova-%{version}~%{bzrtag}.tar.gz
+Source0:          http://nova.openstack.org/tarballs/nova-%{version}%{snaptag}.tar.gz
 Source1:          %{shortname}.conf
 Source6:          %{shortname}.logrotate
 
@@ -61,7 +62,6 @@ Group:            Applications/System
 Requires:         %{name} = %{version}-%{release}
 Requires:         %{name}-api = %{version}-%{release}
 Requires:         %{name}-compute = %{version}-%{release}
-Requires:         %{name}-instancemonitor = %{version}-%{release}
 Requires:         %{name}-network = %{version}-%{release}
 Requires:         %{name}-objectstore = %{version}-%{release}
 Requires:         %{name}-scheduler = %{version}-%{release}
@@ -79,7 +79,6 @@ Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
 Requires:         %{name}-compute = %{version}-%{release}
-Requires:         %{name}-instancemonitor = %{version}-%{release}
 
 %description      node-compute
 OpenStack Compute (codename Nova) is open source software designed to
@@ -168,19 +167,6 @@ provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
 This package contains the Nova Compute Worker.
-
-%package          instancemonitor
-Summary:          A OpenStack Compute instancemonitor server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-
-%description      instancemonitor
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova instance monitor.
 
 %package          network
 Summary:          A OpenStack Compute network server
@@ -283,6 +269,9 @@ sphinx-build -b html source build/html
 popd
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
+
+# Give instance-usage-audit a reasonable prefix
+mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-instance-usage-audit
 
 # Setup directories
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}
@@ -465,6 +454,7 @@ fi
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
 %{_bindir}/nova-console
 %{_bindir}/nova-debug
+%{_bindir}/nova-instance-usage-audit
 %{_bindir}/nova-logspool
 %{_bindir}/nova-manage
 %{_bindir}/nova-spoolsentry
@@ -498,10 +488,6 @@ fi
 %{_initrddir}/%{name}-ajax-console-proxy
 %{_datarootdir}/%{shortname}/ajaxterm
 
-%files instancemonitor
-%doc LICENSE
-%{_bindir}/nova-instancemonitor
-
 %files network
 %doc LICENSE
 %{_bindir}/nova-network
@@ -532,6 +518,11 @@ fi
 %files node-compute
 
 %changelog
+* Tue Aug  9 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1409bzr
+- Update to newer upstream
+- nova-instancemonitor has been removed
+- nova-instance-usage-audit added
+
 * Tue Aug  9 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.bzr1130
 - More cleanups
 - Change release tag to reflect pre-release status
