@@ -14,16 +14,15 @@ Source0:          http://nova.openstack.org/tarballs/nova-%{version}~%{bzrtag}.t
 Source1:          %{shortname}.conf
 Source6:          %{shortname}.logrotate
 
-# Initscripts
-Source11:         %{shortname}-api.init
-Source12:         %{shortname}-compute.init
-Source13:         %{shortname}-network.init
-Source14:         %{shortname}-objectstore.init
-Source15:         %{shortname}-scheduler.init
-Source16:         %{shortname}-volume.init
-Source17:         %{shortname}-direct-api.init
-Source18:         %{shortname}-ajax-console-proxy.init
-Source19:         %{shortname}-vncproxy.init
+Source11:         %{name}-api.init
+Source12:         %{name}-compute.init
+Source13:         %{name}-network.init
+Source14:         %{name}-objectstore.init
+Source15:         %{name}-scheduler.init
+Source16:         %{name}-volume.init
+Source17:         %{name}-direct-api.init
+Source18:         %{name}-ajax-console-proxy.init
+Source19:         %{name}-vncproxy.init
 
 Source20:         %{shortname}-sudoers
 Source21:         %{shortname}-polkit.pkla
@@ -147,7 +146,6 @@ Summary:          A OpenStack Compute API server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 Requires:         python-paste
 Requires:         python-paste-deploy
 
@@ -163,7 +161,6 @@ Summary:          A OpenStack Compute compute server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 Requires:         libvirt-python
 Requires:         libvirt >= 0.8.2
 Requires:         libxml2-python
@@ -182,7 +179,6 @@ Summary:          A OpenStack Compute instancemonitor server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 
 %description      instancemonitor
 OpenStack Compute (codename Nova) is open source software designed to
@@ -196,7 +192,6 @@ Summary:          A OpenStack Compute network server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 
 %description      network
 OpenStack Compute (codename Nova) is open source software designed to
@@ -210,7 +205,6 @@ Summary:          A OpenStack Compute objectstore server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 
 %description      objectstore
 OpenStack Compute (codename Nova) is open source software designed to
@@ -224,7 +218,6 @@ Summary:          A OpenStack Compute scheduler server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 
 %description      scheduler
 OpenStack Compute (codename Nova) is open source software designed to
@@ -238,7 +231,6 @@ Summary:          A OpenStack Compute volume server
 Group:            Applications/System
 
 Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
 
 %description      volume
 OpenStack Compute (codename Nova) is open source software designed to
@@ -311,15 +303,15 @@ install -d -m 750 %{buildroot}%{_sysconfdir}/nova
 install -p -D -m 640 %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
 
 # Install initscripts for Nova services
-install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{shortname}-api
-install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{shortname}-compute
-install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/%{shortname}-network
-install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/%{shortname}-objectstore
-install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/%{shortname}-scheduler
-install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/%{shortname}-volume
-install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/%{shortname}-direct-api
-install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/%{shortname}-ajax-console-proxy
-install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{shortname}-vncproxy
+install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{name}-api
+install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{name}-compute
+install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/%{name}-network
+install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/%{name}-objectstore
+install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/%{name}-scheduler
+install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/%{name}-volume
+install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/%{name}-direct-api
+install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/%{name}-ajax-console-proxy
+install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{name}-vncproxy
 
 # Install sudoers
 install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/%{shortname}
@@ -360,106 +352,115 @@ useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s 
 -c "OpenStack Nova Daemons" nova
 exit 0
 
+%post
+/sbin/chkconfig --add %{name}-vncproxy
+
+%preun
+if [ $1 -eq 0 ] ; then
+    /sbin/service %{name}-vncproxy stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-vncproxy
+fi
+
 %post api
-/sbin/chkconfig --add %{shortname}-api
-/sbin/chkconfig --add %{shortname}-direct-api
+/sbin/chkconfig --add %{name}-api
+/sbin/chkconfig --add %{name}-direct-api
 
 %preun api
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{shortname}-api stop >/dev/null 2>&1
-    /sbin/service %{shortname}-direct-api stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{shortname}-api
-    /sbin/chkconfig --del %{shortname}-direct-api
+    /sbin/service %{name}-api stop >/dev/null 2>&1
+    /sbin/service %{name}-direct-api stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-api
+    /sbin/chkconfig --del %{name}-direct-api
 fi
 
 %postun api
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{shortname}-api condrestart > /dev/null 2>&1 || :
-    /sbin/service %{shortname}-direct-api condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-api condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-direct-api condrestart > /dev/null 2>&1 || :
 fi
 
 # compute
 
 %post compute
-/sbin/chkconfig --add %{shortname}-ajax-console-proxy
-/sbin/chkconfig --add %{shortname}-compute
+/sbin/chkconfig --add %{name}-ajax-console-proxy
+/sbin/chkconfig --add %{name}-compute
 
 %preun compute
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{shortname}-ajax-console-proxy stop >/dev/null 2>&1
-    /sbin/service %{shortname}-compute stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{shortname}-ajax-console-proxy
-    /sbin/chkconfig --del %{shortname}-compute
+    /sbin/service %{name}-ajax-console-proxy stop >/dev/null 2>&1
+    /sbin/service %{name}-compute stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-ajax-console-proxy
+    /sbin/chkconfig --del %{name}-compute
 fi
 
 %postun compute
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{shortname}-ajax-console-proxy condrestart > /dev/null 2>&1 || :
-    /sbin/service %{shortname}-compute condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-ajax-console-proxy condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-compute condrestart > /dev/null 2>&1 || :
 fi
 
 # network
 
 %post network
-/sbin/chkconfig --add %{shortname}-network
+/sbin/chkconfig --add %{name}-network
 
 %preun network
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{shortname}-network stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{shortname}-network
+    /sbin/service %{name}-network stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-network
 fi
 
 %postun network
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{shortname}-network condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-network condrestart > /dev/null 2>&1 || :
 fi
 
 # objectstore
 
 %post objectstore
-/sbin/chkconfig --add %{shortname}-objectstore
+/sbin/chkconfig --add %{name}-objectstore
 
 %preun objectstore
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{shortname}-objectstore stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{shortname}-objectstore
+    /sbin/service %{name}-objectstore stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-objectstore
 fi
 
 %postun objectstore
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{shortname}-objectstore condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-objectstore condrestart > /dev/null 2>&1 || :
 fi
 
 # scheduler
 
 %post scheduler
-/sbin/chkconfig --add %{shortname}-scheduler
+/sbin/chkconfig --add %{name}-scheduler
 
 %preun scheduler
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{shortname}-scheduler stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{shortname}-scheduler
+    /sbin/service %{name}-scheduler stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-scheduler
 fi
 
 %postun scheduler
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{shortname}-scheduler condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-scheduler condrestart > /dev/null 2>&1 || :
 fi
 
 # volume
 
 %post volume
-/sbin/chkconfig --add %{shortname}-volume
+/sbin/chkconfig --add %{name}-volume
 
 %preun volume
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{shortname}-volume stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{shortname}-volume
+    /sbin/service %{name}-volume stop >/dev/null 2>&1
+    /sbin/chkconfig --del %{name}-volume
 fi
 
 %postun volume
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{shortname}-volume condrestart > /dev/null 2>&1 || :
+    /sbin/service %{name}-volume condrestart > /dev/null 2>&1 || :
 fi
 
 %files
@@ -476,7 +477,7 @@ fi
 %{_bindir}/nova-manage
 %{_bindir}/nova-spoolsentry
 %{_bindir}/nova-vncproxy
-%{_initrddir}/%{shortname}-vncproxy
+%{_initrddir}/%{name}-vncproxy
 %{_bindir}/stack
 %{_datarootdir}/nova
 %defattr(-,nova,nobody,-)
@@ -490,8 +491,8 @@ fi
 
 %files api
 %doc LICENSE
-%{_initrddir}/%{shortname}-api
-%{_initrddir}/%{shortname}-direct-api
+%{_initrddir}/%{name}-api
+%{_initrddir}/%{name}-direct-api
 %{_bindir}/nova-api
 %{_bindir}/nova-direct-api
 %defattr(-,nova,nobody,-)
@@ -503,8 +504,8 @@ fi
 %{_bindir}/euca-get-ajax-console
 %{_bindir}/nova-ajax-console-proxy
 %{_bindir}/nova-compute
-%{_initrddir}/%{shortname}-compute
-%{_initrddir}/%{shortname}-ajax-console-proxy
+%{_initrddir}/%{name}-compute
+%{_initrddir}/%{name}-ajax-console-proxy
 %{_datarootdir}/%{shortname}/ajaxterm
 
 %files instancemonitor
@@ -515,23 +516,23 @@ fi
 %doc LICENSE
 %{_bindir}/nova-network
 %{_bindir}/nova-dhcpbridge
-%{_initrddir}/%{shortname}-network
+%{_initrddir}/%{name}-network
 
 %files objectstore
 %doc LICENSE
 %{_bindir}/nova-import-canonical-imagestore
 %{_bindir}/nova-objectstore
-%{_initrddir}/%{shortname}-objectstore
+%{_initrddir}/%{name}-objectstore
 
 %files scheduler
 %doc LICENSE
 %{_bindir}/nova-scheduler
-%{_initrddir}/%{shortname}-scheduler
+%{_initrddir}/%{name}-scheduler
 
 %files volume
 %doc LICENSE
 %{_bindir}/nova-volume
-%{_initrddir}/%{shortname}-volume
+%{_initrddir}/%{name}-volume
 
 %if 0%{?with_doc}
 %files doc
