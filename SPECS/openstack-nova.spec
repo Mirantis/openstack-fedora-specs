@@ -562,7 +562,6 @@ fi
 
 %files instancemonitor
 %defattr(-,root,root,-)
-%{_bindir}/nova-instancemonitor
 #{_initrddir}/%{name}-instancemonitor
 
 %files network
