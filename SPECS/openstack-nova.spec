@@ -1,8 +1,8 @@
-%define shortname nova
-%define bzrtag 1409
-%define snaptag ~d4~20110809.%{bzrtag}
-
 %global with_doc %{!?_without_doc:1}%{?_without_doc:0}
+
+%global shortname nova
+%global bzrtag 1409
+%global snaptag ~d4~20110809.%{bzrtag}
 
 Name:             openstack-nova
 Version:          2011.3
