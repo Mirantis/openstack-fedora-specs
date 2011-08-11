@@ -107,6 +107,7 @@ Requires:         python-eventlet
 Requires:         python-greenlet
 Requires:         python-gflags
 Requires:         python-lockfile
+Requires:         python-lxml
 Requires:         python-mox
 Requires:         python-redis
 Requires:         python-routes
