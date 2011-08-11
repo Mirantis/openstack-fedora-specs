@@ -1,13 +1,14 @@
+%global bzrtag 74
 
 Name:             openstack-novaclient
-Version:          2.5.1
-Release:          1%{?dist}
+Version:          2.6.1
+Release:          0.1.%{bzrtag}bzr%{?dist}
 Summary:          Client for OpenStack Nova API
 
 Group:            Applications/System
 License:          ASL 2.0
 URL:              http://pypi.python.org/pypi/python-novaclient
-Source0:          http://pypi.python.org/packages/source/p/python-novaclient/python-novaclient-%{version}.tar.gz
+Source0:          http://nova.openstack.org/tarballs/python-novaclient-%{version}~bzr%{bzrtag}.tar.gz
 
 BuildArch:        noarch
 BuildRequires:    python-devel
@@ -84,6 +85,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Wed Aug 10 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.1.74bzr
+- Update to latest upstream
+
 * Mon Aug  8 2011 Mark McLoughlin <markmc@redhat.com> - 2.5.1-1
 - Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
   with cleanups by Mark McLoughlin
