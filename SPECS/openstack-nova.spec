@@ -291,6 +291,10 @@ install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/networks
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/tmp
 install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 
+# Setup ghost sqlite DB
+touch %{buildroot}%{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+chmod 640 %{buildroot}%{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+
 # Setup ghost CA cert
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/CA
 install -p -m 755 %{shortname}/CA/{*.sh,openssl.cnf.tmpl} %{buildroot}%{_sharedstatedir}/%{shortname}/CA
@@ -351,6 +355,12 @@ exit 0
 
 %post
 /sbin/chkconfig --add %{name}-vncproxy
+
+# Initialize the DB
+if [ ! -f %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite ]; then
+    runuser -l -s /bin/bash -c 'nova-manage --flagfile=/dev/null --logdir=%{_localstatedir}/log/%{shortname} --state_path=%{_sharedstatedir}/%{shortname} db sync' nova
+    chmod 600 %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+fi
 
 #
 # generate the CA certificate
@@ -504,6 +514,8 @@ fi
 %dir %{_sharedstatedir}/%{shortname}/keys
 %dir %{_sharedstatedir}/%{shortname}/networks
 %dir %{_sharedstatedir}/%{shortname}/tmp
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+
 %dir %{_sharedstatedir}/%{shortname}/CA/
 %dir %{_sharedstatedir}/%{shortname}/CA/certs
 %dir %{_sharedstatedir}/%{shortname}/CA/crl
