@@ -292,8 +292,8 @@ install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
 
 # Install config file
-install -d -m 750 %{buildroot}%{_sysconfdir}/nova
-install -p -D -m 640 %{SOURCE1} %{buildroot}%{_sysconfdir}/nova/nova.conf
+install -d -m 755 %{buildroot}%{_sysconfdir}/%{shortname}
+install -p -D -m 640 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}.conf
 
 # Install initscripts for Nova services
 install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{name}-api
@@ -454,8 +454,8 @@ fi
 
 %files
 %doc LICENSE
-%dir %{_sysconfdir}/nova
-%config(noreplace) %{_sysconfdir}/nova/nova.conf
+%dir %{_sysconfdir}/%{shortname}
+%attr(-, root, nova) %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}.conf
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
