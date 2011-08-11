@@ -293,7 +293,7 @@ cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
 
 # Install config file
 install -d -m 750 %{buildroot}%{_sysconfdir}/nova
-install -p -D -m 640 %{SOURCE0} %{buildroot}%{_sysconfdir}/nova/nova.conf
+install -p -D -m 640 %{SOURCE1} %{buildroot}%{_sysconfdir}/nova/nova.conf
 
 # Install initscripts for Nova services
 install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{name}-api
