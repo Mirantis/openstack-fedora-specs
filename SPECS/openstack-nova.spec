@@ -282,6 +282,7 @@ mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-insta
 
 # Setup directories
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/buckets
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/images
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/instances
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/keys
