@@ -71,6 +71,7 @@ Requires:         %{name}-volume = %{version}-%{release}
 Requires:         openstack-novaclient
 Requires:         openstack-glance
 Requires:         rabbitmq-server
+Requires:         openssl
 
 %description      node-full
 This package installs full set of OpenStack Nova Cloud Controller packages.
@@ -289,7 +290,15 @@ install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/keys
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/networks
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/tmp
 install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
-cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
+
+# Setup ghost CA cert
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/CA
+install -p -m 755 %{shortname}/CA/{*.sh,openssl.cnf.tmpl} %{buildroot}%{_sharedstatedir}/%{shortname}/CA
+install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/CA/{certs,crl,newcerts,projects,reqs}
+touch %{buildroot}%{_sharedstatedir}/%{shortname}/CA/{cacert.pem,crl.pem,index.txt,openssl.cnf,serial}
+install -d -m 750 %{buildroot}%{_sharedstatedir}/%{shortname}/CA/private
+touch %{buildroot}%{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
+chmod 640 %{buildroot}%{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
 
 # Install config file
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{shortname}
@@ -342,6 +351,23 @@ exit 0
 
 %post
 /sbin/chkconfig --add %{name}-vncproxy
+
+#
+# generate the CA certificate
+#
+# Note: this sucks; if you boot this filesystem multiple
+# times (e.g. as a VM image), then each nova instance will
+# be issuing # certs using the same CA cert.
+#
+# We need the CA cert to be lazily generated. Doing it in
+# one of the initscripts doesn't help, as you may do e.g.
+# 'nova-manage project zipfile' before ever starting any of
+# the services.
+#
+if [ ! -f %{_sharedstatedir}/%{shortname}/CA/cacert.pem ]; then
+    runuser -l -s /bin/bash -c 'cd CA && ./genrootca.sh 2>/dev/null' nova
+    chmod 600 %{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
+fi
 
 %preun
 if [ $1 -eq 0 ] ; then
@@ -469,7 +495,30 @@ fi
 %{_initrddir}/%{name}-vncproxy
 %{_bindir}/stack
 %{_datarootdir}/nova
-%attr(-, nova, nobody) %{_sharedstatedir}/nova
+
+%defattr(-, nova, nobody, -)
+%dir %{_sharedstatedir}/%{shortname}
+%dir %{_sharedstatedir}/%{shortname}/buckets
+%dir %{_sharedstatedir}/%{shortname}/images
+%dir %{_sharedstatedir}/%{shortname}/instances
+%dir %{_sharedstatedir}/%{shortname}/keys
+%dir %{_sharedstatedir}/%{shortname}/networks
+%dir %{_sharedstatedir}/%{shortname}/tmp
+%dir %{_sharedstatedir}/%{shortname}/CA/
+%dir %{_sharedstatedir}/%{shortname}/CA/certs
+%dir %{_sharedstatedir}/%{shortname}/CA/crl
+%dir %{_sharedstatedir}/%{shortname}/CA/newcerts
+%dir %{_sharedstatedir}/%{shortname}/CA/projects
+%dir %{_sharedstatedir}/%{shortname}/CA/reqs
+%{_sharedstatedir}/%{shortname}/CA/*.sh
+%{_sharedstatedir}/%{shortname}/CA/openssl.cnf.tmpl
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/cacert.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/crl.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/index.txt
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/openssl.cnf
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/serial
+%dir %attr(0750, -, -) %{_sharedstatedir}/%{shortname}/CA/private
+%attr(0600, -, -) %ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
 
 %files -n python-nova
 %defattr(-,root,root,-)
