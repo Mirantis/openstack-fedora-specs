@@ -325,9 +325,8 @@ install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/%{shortname}/interf
 install -d -m 755 %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d
 install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{shortname}.pkla
 
-# Fixing ajaxterm installation
-mv %{buildroot}%{_datarootdir}/%{shortname}/euca-get-ajax-console %{buildroot}%{_bindir}
-rm -fr %{buildroot}%{_datarootdir}/%{shortname}/{install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx} %{buildroot}%{_datarootdir}/%{shortname}/ajaxterm/configure*
+# Remove ajaxterm and various other tools
+rm -fr %{buildroot}%{_datarootdir}/%{shortname}/{euca-get-ajax-console,install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx}
 
 # Remove unneeded in production stuff
 rm -fr %{buildroot}%{python_sitelib}/run_tests.*
@@ -489,12 +488,10 @@ fi
 %files compute
 %doc LICENSE
 %{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
-%{_bindir}/euca-get-ajax-console
 %{_bindir}/nova-ajax-console-proxy
 %{_bindir}/nova-compute
 %{_initrddir}/%{name}-compute
 %{_initrddir}/%{name}-ajax-console-proxy
-%{_datarootdir}/%{shortname}/ajaxterm
 
 %files network
 %doc LICENSE
