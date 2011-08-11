@@ -46,6 +46,16 @@ Requires:         python-routes
 Requires:         python-sqlalchemy
 Requires:         python-webob
 
+#
+# The image cache requires this http://pypi.python.org/pypi/xattr
+# but Fedora's python-xattr is http://pyxattr.sourceforge.net/
+#
+# The cache is disabled by default, so it's only an issue if you
+# enabled it
+#
+# Requires:       python-xatrr
+#
+
 %description -n   python-%{shortname}
 OpenStack Image Service (code-named Glance) provides discovery, registration,
 and delivery services for virtual disk images.
