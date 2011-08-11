@@ -14,6 +14,8 @@ Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{snapta
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
 
+Patch1:           %{shortname}-fix-handling-of-image-cache-enabled-config.patch
+
 BuildArch:        noarch
 BuildRequires:    python-devel
 BuildRequires:    python-setuptools
@@ -76,6 +78,8 @@ This package contains documentation files for %{shortname}.
 
 %prep
 %setup -q -n %{shortname}-%{version}
+
+%patch1 -p1 -b .cache-enabled
 
 sed -i 's|\(sql_connection = sqlite://\)\(/glance.sqlite\)|\1%{_sharedstatedir}/%{shortname}\2|' etc/%{shortname}-registry.conf
 

@@ -1,0 +1,28 @@
+From: Mark McLoughlin <markmc@redhat.com>
+Subject: [PATCH] Fix handling of image cache enabled config
+
+Paste deploy config values are always strings, we need to convert it
+to a bool.
+
+This reverts part of commit 631d707a3.
+---
+ glance/image_cache/__init__.py |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/glance/image_cache/__init__.py b/glance/image_cache/__init__.py
+index e4758c4..244f7ff 100644
+--- a/glance/image_cache/__init__.py
++++ b/glance/image_cache/__init__.py
+@@ -98,7 +98,8 @@ class ImageCache(object):
+ 
+     @property
+     def enabled(self):
+-        return self.options.get('image_cache_enabled', False)
++        return config.get_option(
++            self.options, 'image_cache_enabled', type='bool', default=False)
+ 
+     @property
+     def path(self):
+-- 
+1.7.4.4
+
