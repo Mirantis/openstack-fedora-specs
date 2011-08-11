@@ -2,6 +2,8 @@
 %define bzrtag 1409
 %define snaptag ~d4~20110809.%{bzrtag}
 
+%global with_doc %{!?_without_doc:1}%{?_without_doc:0}
+
 Name:             openstack-nova
 Version:          2011.3
 Release:          0.2.%{bzrtag}bzr%{?dist}
@@ -220,6 +222,7 @@ redundant and scalable cloud computing platform.
 
 This package contains the Nova Volume service.
 
+%if 0%{?with_doc}
 %package doc
 Summary:          Documentation for OpenStack Compute
 Group:            Documentation
@@ -248,6 +251,7 @@ provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
 This package contains documentation files for %{shortname}.
+%endif
 
 %prep
 %setup -q -n %{shortname}-%{version}
@@ -263,12 +267,14 @@ find nova -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
 # docs generation requires everything to be installed first
+%if 0%{?with_doc}
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 pushd doc
 sphinx-build -b html source build/html
 popd
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
+%endif
 
 # Give instance-usage-audit a reasonable prefix
 mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-instance-usage-audit
@@ -510,8 +516,10 @@ fi
 %{_bindir}/nova-volume
 %{_initrddir}/%{name}-volume
 
+%if 0%{?with_doc}
 %files doc
 %doc LICENSE doc/build/html
+%endif
 
 %files node-full
 
