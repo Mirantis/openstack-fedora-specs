@@ -572,7 +572,6 @@ fi
 
 %files objectstore
 %defattr(-,root,root,-)
-%{_bindir}/nova-import-canonical-imagestore
 %{_bindir}/nova-objectstore
 %{_initrddir}/%{name}-objectstore
 
