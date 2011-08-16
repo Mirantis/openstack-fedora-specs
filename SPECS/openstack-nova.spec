@@ -528,6 +528,7 @@ fi
 %{_bindir}/nova-spoolsentry
 %{_bindir}/nova-vncproxy
 %{_bindir}/instance-usage-audit
+%{_bindir}/clear_rabbit_queues
 %{_initrddir}/%{name}-vncproxy
 %{_bindir}/stack
 %{_datarootdir}/nova
