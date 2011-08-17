@@ -1,6 +1,6 @@
 %define shortname glance
-%define bzrtag 967
-%define snaptag ~d4~20110805.%{bzrtag}
+%define bzrtag 987
+%define snaptag ~d4~20110815.%{bzrtag}
 
 Name:             openstack-glance
 Version:          2011.3
@@ -13,8 +13,6 @@ URL:              http://%{shortname}.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{snaptag}.tar.gz
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
-
-Patch1:           %{shortname}-fix-handling-of-image-cache-enabled-config.patch
 
 BuildArch:        noarch
 BuildRequires:    python-devel
@@ -42,6 +40,7 @@ Summary:          Glance Python libraries
 Group:            Applications/System
 
 Requires:         python-eventlet
+Requires:         python-kombu
 Requires:         python-routes
 Requires:         python-sqlalchemy
 Requires:         python-webob
@@ -87,8 +86,6 @@ This package contains documentation files for %{shortname}.
 
 %prep
 %setup -q -n %{shortname}-%{version}
-
-%patch1 -p1 -b .cache-enabled
 
 sed -i 's|\(sql_connection = sqlite://\)\(/glance.sqlite\)|\1%{_sharedstatedir}/%{shortname}\2|' etc/%{shortname}-registry.conf
 
@@ -177,6 +174,10 @@ fi
 %doc doc/build/html
 
 %changelog
+* Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.987bzr
+- Update to latest upstream
+- Require python-kombu for new notifiers support
+
 * Mon Aug  8 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.967bzr
 - Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
   with cleanups by Mark McLoughlin
