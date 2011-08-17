@@ -232,6 +232,8 @@ Group:            Documentation
 Requires:         %{name} = %{version}-%{release}
 
 BuildRequires:    python-sphinx
+BuildRequires:    graphviz
+
 BuildRequires:    python-nose
 # Required to build module documents
 BuildRequires:    python-IPy
