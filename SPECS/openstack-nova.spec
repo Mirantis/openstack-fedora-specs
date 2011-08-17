@@ -1,12 +1,12 @@
 %global with_doc %{!?_without_doc:1}%{?_without_doc:0}
 
 %global shortname nova
-%global bzrtag 1409
-%global snaptag ~d4~20110809.%{bzrtag}
+%global bzrtag 1449
+%global snaptag ~d4~20110816.%{bzrtag}
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          0.2.%{bzrtag}bzr%{?dist}
+Release:          0.1.%{bzrtag}bzr%{?dist}
 Summary:          OpenStack Compute (nova)
 
 Group:            Applications/System
@@ -286,8 +286,9 @@ popd
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 %endif
 
-# Give instance-usage-audit a reasonable prefix
+# Give instance-usage-audit and clear_rabbit_queues a reasonable prefix
 mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-instance-usage-audit
+mv %{buildroot}%{_bindir}/clear_rabbit_queues %{buildroot}%{_bindir}/nova-clear-rabbit-queues
 
 # Setup directories
 install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}
@@ -504,6 +505,7 @@ fi
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
 %{_bindir}/nova-console
+%{_bindir}/nova-clear-rabbit-queues
 %{_bindir}/nova-debug
 %{_bindir}/nova-instance-usage-audit
 %{_bindir}/nova-logspool
@@ -570,7 +572,6 @@ fi
 
 %files objectstore
 %doc LICENSE
-%{_bindir}/nova-import-canonical-imagestore
 %{_bindir}/nova-objectstore
 %{_initrddir}/%{name}-objectstore
 
@@ -594,6 +595,11 @@ fi
 %files node-compute
 
 %changelog
+* Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.1449bzr
+- Update to latest upstream.
+- nova-import-canonical-imagestore has been removed
+- nova-clear-rabbit-queues was added
+
 * Tue Aug  9 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1409bzr
 - Update to newer upstream
 - nova-instancemonitor has been removed
