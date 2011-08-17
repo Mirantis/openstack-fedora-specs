@@ -141,9 +141,9 @@ exit 0
 
 %preun
 if [ $1 = 0 ] ; then
-    /sbin/service %{name}-api stop
+    /sbin/service %{name}-api stop >/dev/null 2>&1
     /sbin/chkconfig --del %{name}-api
-    /sbin/service %{name}-registry stop
+    /sbin/service %{name}-registry stop >/dev/null 2>&1
     /sbin/chkconfig --del %{name}-registry
 fi
 
