@@ -30,6 +30,9 @@ Source20:         %{shortname}-sudoers
 Source21:         %{shortname}-polkit.pkla
 Source22:         %{shortname}-ifc-template
 
+Patch1:           %{shortname}-fix-flavorid-migration-failure.patch
+Patch2:           %{shortname}-do-not-require-bridge_interface-for-flatdhcpmanager.patch
+
 BuildArch:        noarch
 BuildRequires:    intltool
 BuildRequires:    python-devel
@@ -259,6 +262,9 @@ This package contains documentation files for %{shortname}.
 
 %prep
 %setup -q -n %{shortname}-%{version}
+
+%patch1 -p1
+%patch2 -p1
 
 find . \( -name .gitignore -o -name .placeholder \) -delete
 
