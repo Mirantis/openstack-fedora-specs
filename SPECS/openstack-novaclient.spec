@@ -1,4 +1,4 @@
-%global bzrtag 74
+%global bzrtag 83
 
 Name:             openstack-novaclient
 Version:          2.6.1
@@ -85,6 +85,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.1.83bz
+- Update to latest upstream
+
 * Wed Aug 10 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.1.74bzr
 - Update to latest upstream
 
