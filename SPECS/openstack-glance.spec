@@ -53,8 +53,7 @@ Requires:         python-webob
 # The cache is disabled by default, so it's only an issue if you
 # enabled it
 #
-# Requires:       python-xatrr
-#
+Requires:         python-xattr
 
 %description -n   python-%{shortname}
 OpenStack Image Service (code-named Glance) provides discovery, registration,
