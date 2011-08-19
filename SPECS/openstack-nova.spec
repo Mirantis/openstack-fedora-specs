@@ -527,6 +527,8 @@ fi
 %{_bindir}/nova-manage
 %{_bindir}/nova-spoolsentry
 %{_bindir}/nova-vncproxy
+%{_bindir}/nova-api-ec2
+%{_bindir}/nova-api-os
 %{_bindir}/instance-usage-audit
 %{_bindir}/clear_rabbit_queues
 %{_initrddir}/%{name}-vncproxy
