@@ -2,13 +2,15 @@
 
 Name:             openstack-novaclient
 Version:          2.6.1
-Release:          0.1.%{bzrtag}bzr%{?dist}
+Release:          0.2.%{bzrtag}bzr%{?dist}
 Summary:          Client for OpenStack Nova API
 
 Group:            Applications/System
 License:          ASL 2.0
 URL:              http://pypi.python.org/pypi/python-novaclient
 Source0:          http://nova.openstack.org/tarballs/python-novaclient-%{version}~bzr%{bzrtag}.tar.gz
+
+Patch1:           novaclient-remove-argparse-from-egg-requires.patch
 
 BuildArch:        noarch
 BuildRequires:    python-devel
@@ -58,6 +60,8 @@ This package contains auto-generated documentation.
 %prep
 %setup -q -n python-novaclient-%{version}
 
+%patch1 -p1
+
 %build
 %{__python} setup.py build
 
@@ -85,6 +89,9 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Fri Aug 19 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.2.83bzr
+- Remove argparse from egg requires.txt; no egg info for argparse available
+
 * Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.1.83bz
 - Update to latest upstream
 

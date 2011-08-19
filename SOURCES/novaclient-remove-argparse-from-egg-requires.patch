@@ -1,0 +1,25 @@
+From: Mark McLoughlin <markmc@redhat.com>
+Subject: [PATCH] Remove argparse from egg requires.txt
+
+It looks like there is no egg info available for argparse on
+Fedora so the requirement can't be satisfied.
+---
+ setup.py |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index b6e6720..66861cf 100644
+--- a/setup.py
++++ b/setup.py
+@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
+ def read(fname):
+     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+ 
+-requirements = ['httplib2', 'argparse', 'prettytable']
++requirements = ['httplib2', 'prettytable']
+ if sys.version_info < (2, 6):
+     requirements.append('simplejson')
+ 
+-- 
+1.7.4.4
+
