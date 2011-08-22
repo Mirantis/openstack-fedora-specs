@@ -13,7 +13,6 @@ Source0:          http://nova.openstack.org/tarballs/python-novaclient-%{version
 Patch1:           novaclient-remove-argparse-from-egg-requires.patch
 
 BuildArch:        noarch
-BuildRequires:    python-devel
 BuildRequires:    python-setuptools
 
 Requires:         python-novaclient = %{version}-%{release}

@@ -15,7 +15,6 @@ Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
 
 BuildArch:        noarch
-BuildRequires:    python-devel
 BuildRequires:    python-setuptools
 
 Requires(post):   chkconfig

@@ -35,7 +35,6 @@ Patch2:           %{shortname}-do-not-require-bridge_interface-for-flatdhcpmanag
 
 BuildArch:        noarch
 BuildRequires:    intltool
-BuildRequires:    python-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-distutils-extra >= 2.18
 BuildRequires:    python-netaddr
