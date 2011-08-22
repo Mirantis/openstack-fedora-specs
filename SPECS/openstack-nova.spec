@@ -6,7 +6,7 @@
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          0.1.%{bzrtag}bzr%{?dist}
+Release:          0.2.%{bzrtag}bzr%{?dist}
 Summary:          OpenStack Compute (nova)
 
 Group:            Applications/System
@@ -70,7 +70,6 @@ Requires:         %{name}-network = %{version}-%{release}
 Requires:         %{name}-objectstore = %{version}-%{release}
 Requires:         %{name}-scheduler = %{version}-%{release}
 Requires:         %{name}-volume = %{version}-%{release}
-Requires:         python-novaclient
 Requires:         openstack-glance
 Requires:         rabbitmq-server
 Requires:         openssl
@@ -594,6 +593,9 @@ fi
 %files node-compute
 
 %changelog
+* Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
+- Remove dependency on python-novaclient
+
 * Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.1449bzr
 - Update to latest upstream.
 - nova-import-canonical-imagestore has been removed
