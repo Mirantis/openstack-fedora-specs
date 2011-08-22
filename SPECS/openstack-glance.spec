@@ -1,4 +1,3 @@
-%define shortname glance
 %define bzrtag 987
 %define snaptag ~d4~20110815.%{bzrtag}
 
@@ -9,7 +8,7 @@ Summary:          OpenStack Image Service
 
 Group:            Applications/System
 License:          ASL 2.0
-URL:              http://%{shortname}.openstack.org
+URL:              http://glance.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{snaptag}.tar.gz
 Source1:          %{name}-api.init
 Source2:          %{name}-registry.init
@@ -21,7 +20,7 @@ Requires(post):   chkconfig
 Requires(preun):  initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils
-Requires:         python-%{shortname} = %{version}-%{release}
+Requires:         python-glance = %{version}-%{release}
 
 %description
 OpenStack Image Service (code-named Glance) provides discovery, registration,
@@ -34,7 +33,7 @@ Service's client library for streaming virtual disk images.
 
 This package contains the API and registry servers.
 
-%package -n       python-%{shortname}
+%package -n       python-glance
 Summary:          Glance Python libraries
 Group:            Applications/System
 
@@ -53,11 +52,11 @@ Requires:         python-webob
 #
 Requires:         python-xattr
 
-%description -n   python-%{shortname}
+%description -n   python-glance
 OpenStack Image Service (code-named Glance) provides discovery, registration,
 and delivery services for virtual disk images.
 
-This package contains the %{shortname} Python library.
+This package contains the glance Python library.
 
 %package doc
 Summary:          Documentation for OpenStack Image Service
@@ -81,12 +80,12 @@ BuildRequires:    python-webob
 OpenStack Image Service (code-named Glance) provides discovery, registration,
 and delivery services for virtual disk images.
 
-This package contains documentation files for %{shortname}.
+This package contains documentation files for glance.
 
 %prep
-%setup -q -n %{shortname}-%{version}
+%setup -q -n glance-%{version}
 
-sed -i 's|\(sql_connection = sqlite://\)\(/glance.sqlite\)|\1%{_sharedstatedir}/%{shortname}\2|' etc/%{shortname}-registry.conf
+sed -i 's|\(sql_connection = sqlite://\)\(/glance.sqlite\)|\1%{_sharedstatedir}/glance\2|' etc/glance-registry.conf
 
 sed -i '/\/usr\/bin\/env python/d' glance/common/config.py glance/registry/db/migrate_repo/manage.py
 
@@ -108,27 +107,27 @@ popd
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 
 # Setup directories
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/images
+install -d -m 755 %{buildroot}%{_sharedstatedir}/glance/images
 
 # Config file
-install -p -D -m 644 etc/%{shortname}-api.conf %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-api.conf
-install -p -D -m 644 etc/%{shortname}-registry.conf %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
+install -p -D -m 644 etc/glance-api.conf %{buildroot}%{_sysconfdir}/glance/glance-api.conf
+install -p -D -m 644 etc/glance-registry.conf %{buildroot}%{_sysconfdir}/glance/glance-registry.conf
 
 # Initscripts
 install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}-api
 install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/%{name}-registry
 
 # Install pid directory
-install -d -m 755 %{buildroot}%{_localstatedir}/run/%{shortname}
+install -d -m 755 %{buildroot}%{_localstatedir}/run/glance
 
 # Install log directory
-install -d -m 755 %{buildroot}%{_localstatedir}/log/%{shortname}
+install -d -m 755 %{buildroot}%{_localstatedir}/log/glance
 
 %pre
-getent group %{shortname} >/dev/null || groupadd -r %{shortname}
-getent passwd %{shortname} >/dev/null || \
-useradd -r -g %{shortname} -d %{_sharedstatedir}/%{shortname} -s /sbin/nologin \
--c "OpenStack Glance Daemons" %{shortname}
+getent group glance >/dev/null || groupadd -r glance
+getent passwd glance >/dev/null || \
+useradd -r -g glance -d %{_sharedstatedir}/glance -s /sbin/nologin \
+-c "OpenStack Glance Daemons" glance
 exit 0
 
 %post
@@ -145,29 +144,29 @@ fi
 
 %files
 %doc README
-%{_bindir}/%{shortname}
-%{_bindir}/%{shortname}-api
-%{_bindir}/%{shortname}-control
-%{_bindir}/%{shortname}-manage
-%{_bindir}/%{shortname}-registry
-%{_bindir}/%{shortname}-upload
-%{_bindir}/%{shortname}-cache-prefetcher
-%{_bindir}/%{shortname}-cache-pruner
-%{_bindir}/%{shortname}-cache-reaper
-%{_bindir}/%{shortname}-scrubber
+%{_bindir}/glance
+%{_bindir}/glance-api
+%{_bindir}/glance-control
+%{_bindir}/glance-manage
+%{_bindir}/glance-registry
+%{_bindir}/glance-upload
+%{_bindir}/glance-cache-prefetcher
+%{_bindir}/glance-cache-pruner
+%{_bindir}/glance-cache-reaper
+%{_bindir}/glance-scrubber
 %{_initrddir}/%{name}-api
 %{_initrddir}/%{name}-registry
 %dir %{_sysconfdir}/glance
-%config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-api.conf
-%config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}-registry.conf
-%dir %attr(0755, %{shortname}, nobody) %{_sharedstatedir}/%{shortname}
-%dir %attr(0755, %{shortname}, nobody) %{_localstatedir}/log/%{shortname}
-%dir %attr(0755, %{shortname}, nobody) %{_localstatedir}/run/%{shortname}
+%config(noreplace) %{_sysconfdir}/glance/glance-api.conf
+%config(noreplace) %{_sysconfdir}/glance/glance-registry.conf
+%dir %attr(0755, glance, nobody) %{_sharedstatedir}/glance
+%dir %attr(0755, glance, nobody) %{_localstatedir}/log/glance
+%dir %attr(0755, glance, nobody) %{_localstatedir}/run/glance
 
-%files -n python-%{shortname}
+%files -n python-glance
 %doc README
-%{python_sitelib}/%{shortname}
-%{python_sitelib}/%{shortname}-%{version}-*.egg-info
+%{python_sitelib}/glance
+%{python_sitelib}/glance-%{version}-*.egg-info
 
 %files doc
 %doc doc/build/html
