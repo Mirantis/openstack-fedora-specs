@@ -16,8 +16,8 @@
 
 . /etc/rc.d/init.d/functions
 
-suffix="registry"
-prog="openstack-glance-$suffix"
+suffix=registry
+prog=openstack-glance-$suffix
 exec="/usr/bin/glance-$suffix"
 config="/etc/glance/glance-$suffix.conf"
 pidfile="/var/run/glance/glance-$suffix.pid"

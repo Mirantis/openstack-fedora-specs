@@ -32,8 +32,8 @@
 
 . /etc/rc.d/init.d/functions
 
-suffix="compute"
-prog="openstack-nova-$suffix"
+suffix=compute
+prog=openstack-nova-$suffix
 exec="/usr/bin/nova-$suffix"
 config="/etc/nova/nova.conf"
 pidfile="/var/run/nova/nova-$suffix.pid"

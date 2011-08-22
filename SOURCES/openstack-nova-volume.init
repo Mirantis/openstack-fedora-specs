@@ -24,8 +24,8 @@
 
 . /etc/rc.d/init.d/functions
 
-suffix="volume"
-prog="openstack-nova-$suffix"
+suffix=volume
+prog=openstack-nova-$suffix
 exec="/usr/bin/nova-$suffix"
 config="/etc/nova/nova.conf"
 pidfile="/var/run/nova/nova-$suffix.pid"
