@@ -3,7 +3,7 @@
 
 Name:             openstack-glance
 Version:          2011.3
-Release:          0.1.%{bzrtag}bzr%{?dist}
+Release:          0.2.%{bzrtag}bzr%{?dist}
 Summary:          OpenStack Image Service
 
 Group:            Applications/System
@@ -172,6 +172,9 @@ fi
 %doc doc/build/html
 
 %changelog
+* Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.987bzr
+- Fix rpmlint warnings, reduce macro usage (#731966)
+
 * Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.987bzr
 - Update to latest upstream
 - Require python-kombu for new notifiers support
