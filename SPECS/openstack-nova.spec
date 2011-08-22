@@ -70,7 +70,7 @@ Requires:         %{name}-network = %{version}-%{release}
 Requires:         %{name}-objectstore = %{version}-%{release}
 Requires:         %{name}-scheduler = %{version}-%{release}
 Requires:         %{name}-volume = %{version}-%{release}
-Requires:         openstack-novaclient
+Requires:         python-novaclient
 Requires:         openstack-glance
 Requires:         rabbitmq-server
 Requires:         openssl

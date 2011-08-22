@@ -1,11 +1,11 @@
 %global bzrtag 83
 
-Name:             openstack-novaclient
+Name:             python-novaclient
 Version:          2.6.1
-Release:          0.2.%{bzrtag}bzr%{?dist}
-Summary:          Client for OpenStack Nova API
+Release:          0.3.%{bzrtag}bzr%{?dist}
+Summary:          Python API and CLI for OpenStack Nova
 
-Group:            Applications/System
+Group:            Development/Languages
 License:          ASL 2.0
 URL:              http://pypi.python.org/pypi/python-novaclient
 Source0:          http://nova.openstack.org/tarballs/python-novaclient-%{version}~bzr%{bzrtag}.tar.gz
@@ -15,31 +15,15 @@ Patch1:           novaclient-remove-argparse-from-egg-requires.patch
 BuildArch:        noarch
 BuildRequires:    python-setuptools
 
-Requires:         python-novaclient = %{version}-%{release}
-
-%description
-This is a client for the OpenStack Nova API. There's a Python API (the
-novaclient module), and a command-line script (nova). Each implements 100% of
-the OpenStack Nova API.
-
-This package contains command-line script.
-
-%package -n       python-novaclient
-Summary:          Python API for OpenStack Nova
-Group:            Development/Languages
-
 Requires:         python-argparse
 Requires:         python-simplejson
 Requires:         python-httplib2
 Requires:         python-prettytable
 
-
-%description -n   python-novaclient
+%description
 This is a client for the OpenStack Nova API. There's a Python API (the
 novaclient module), and a command-line script (nova). Each implements 100% of
 the OpenStack Nova API.
-
-This package contains Python API.
 
 %package doc
 Summary:          Documentation for OpenStack Nova API Client
@@ -77,10 +61,8 @@ sphinx-build -b html docs html
 rm -fr html/.doctrees html/.buildinfo
 
 %files
-%{_bindir}/nova
-
-%files -n python-novaclient
 %doc README.rst
+%{_bindir}/nova
 %{python_sitelib}/novaclient
 %{python_sitelib}/*.egg-info
 
@@ -88,6 +70,10 @@ rm -fr html/.doctrees html/.buildinfo
 %doc html
 
 %changelog
+* Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.3.83bzr
+- Remove python-devel BR
+- Remove the openstack-novaclient sub-package
+
 * Fri Aug 19 2011 Mark McLoughlin <markmc@redhat.com> - 2.6.1-0.2.83bzr
 - Remove argparse from egg requires.txt; no egg info for argparse available
 
