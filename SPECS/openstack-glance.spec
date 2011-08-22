@@ -3,7 +3,7 @@
 
 Name:             openstack-glance
 Version:          2011.3
-Release:          0.2.%{bzrtag}bzr%{?dist}
+Release:          0.3.%{bzrtag}bzr%{?dist}
 Summary:          OpenStack Image Service
 
 Group:            Applications/System
@@ -14,6 +14,7 @@ Source1:          openstack-glance-api.init
 Source2:          openstack-glance-registry.init
 
 BuildArch:        noarch
+BuildRequires:    python2-devel
 BuildRequires:    python-setuptools
 
 Requires(post):   chkconfig
@@ -172,6 +173,9 @@ fi
 %doc doc/build/html
 
 %changelog
+* Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.987bzr
+- Re-instate python2-devel BR (#731966)
+
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.987bzr
 - Fix rpmlint warnings, reduce macro usage (#731966)
 
