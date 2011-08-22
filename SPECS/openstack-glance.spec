@@ -10,8 +10,8 @@ Group:            Applications/System
 License:          ASL 2.0
 URL:              http://glance.openstack.org
 Source0:          http://glance.openstack.org/tarballs/glance-%{version}%{snaptag}.tar.gz
-Source1:          %{name}-api.init
-Source2:          %{name}-registry.init
+Source1:          openstack-glance-api.init
+Source2:          openstack-glance-registry.init
 
 BuildArch:        noarch
 BuildRequires:    python-setuptools
@@ -114,8 +114,8 @@ install -p -D -m 644 etc/glance-api.conf %{buildroot}%{_sysconfdir}/glance/glanc
 install -p -D -m 644 etc/glance-registry.conf %{buildroot}%{_sysconfdir}/glance/glance-registry.conf
 
 # Initscripts
-install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}-api
-install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/%{name}-registry
+install -p -D -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/openstack-glance-api
+install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/openstack-glance-registry
 
 # Install pid directory
 install -d -m 755 %{buildroot}%{_localstatedir}/run/glance
@@ -131,15 +131,15 @@ useradd -r -g glance -d %{_sharedstatedir}/glance -s /sbin/nologin \
 exit 0
 
 %post
-/sbin/chkconfig --add %{name}-api
-/sbin/chkconfig --add %{name}-registry
+/sbin/chkconfig --add openstack-glance-api
+/sbin/chkconfig --add openstack-glance-registry
 
 %preun
 if [ $1 = 0 ] ; then
-    /sbin/service %{name}-api stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-api
-    /sbin/service %{name}-registry stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-registry
+    /sbin/service openstack-glance-api stop >/dev/null 2>&1
+    /sbin/chkconfig --del openstack-glance-api
+    /sbin/service openstack-glance-registry stop >/dev/null 2>&1
+    /sbin/chkconfig --del openstack-glance-registry
 fi
 
 %files
@@ -154,8 +154,8 @@ fi
 %{_bindir}/glance-cache-pruner
 %{_bindir}/glance-cache-reaper
 %{_bindir}/glance-scrubber
-%{_initrddir}/%{name}-api
-%{_initrddir}/%{name}-registry
+%{_initrddir}/openstack-glance-api
+%{_initrddir}/openstack-glance-registry
 %dir %{_sysconfdir}/glance
 %config(noreplace) %{_sysconfdir}/glance/glance-api.conf
 %config(noreplace) %{_sysconfdir}/glance/glance-registry.conf
