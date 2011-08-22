@@ -10,6 +10,7 @@
 #		* Establish Compute volumes
 
 ### BEGIN INIT INFO
+# Provides:
 # Required-Start: $remote_fs $network $syslog
 # Required-Stop: $remote_fs $syslog
 # Default-Stop: 0 1 6
