@@ -40,8 +40,21 @@ BuildRequires:    python-netaddr
 BuildRequires:    python-lockfile
 
 Requires:         python-nova = %{version}-%{release}
-Requires:         sudo
+Requires:         openstack-glance
+
+Requires:         python-paste
+Requires:         python-paste-deploy
+
+Requires:         libvirt-python
+Requires:         libvirt >= 0.8.2
+Requires:         libxml2-python
+Requires:         python-cheetah
+Requires:         MySQL-python
+
 Requires:         euca2ools
+Requires:         openssl
+Requires:         rabbitmq-server
+Requires:         sudo
 
 Requires(post):   chkconfig
 Requires(postun): initscripts
@@ -57,38 +70,6 @@ including running instances, managing networks, and controlling access
 through users and projects. OpenStack Compute strives to be both
 hardware and hypervisor agnostic, currently supporting a variety of
 standard hardware configurations and seven major hypervisors.
-
-%package          node-full
-Summary:          OpenStack Nova full node installation
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         %{name}-api = %{version}-%{release}
-Requires:         %{name}-compute = %{version}-%{release}
-Requires:         %{name}-network = %{version}-%{release}
-Requires:         %{name}-objectstore = %{version}-%{release}
-Requires:         %{name}-scheduler = %{version}-%{release}
-Requires:         %{name}-volume = %{version}-%{release}
-Requires:         openstack-glance
-Requires:         rabbitmq-server
-Requires:         openssl
-
-%description      node-full
-This package installs full set of OpenStack Nova Cloud Controller packages.
-
-%package          node-compute
-Summary:          OpenStack Nova compute node installation
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         %{name}-compute = %{version}-%{release}
-
-%description      node-compute
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package installs compute set of OpenStack Nova packages.
 
 %package -n       python-nova
 Summary:          Nova Python libraries
@@ -138,91 +119,6 @@ provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
 This package contains the %{shortname} Python library.
-
-%package          api
-Summary:          A OpenStack Compute API server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         python-paste
-Requires:         python-paste-deploy
-
-%description      api
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova API Server.
-
-%package          compute
-Summary:          A OpenStack Compute compute server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         libvirt-python
-Requires:         libvirt >= 0.8.2
-Requires:         libxml2-python
-Requires:         python-cheetah
-Requires:         MySQL-python
-
-%description      compute
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova Compute Worker.
-
-%package          network
-Summary:          A OpenStack Compute network server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-
-%description      network
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova Network Controller.
-
-%package          objectstore
-Summary:          A OpenStack Compute objectstore server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-
-%description      objectstore
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova object store server.
-
-%package          scheduler
-Summary:          A OpenStack Compute scheduler server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-
-%description      scheduler
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova Scheduler.
-
-%package          volume
-Summary:          A OpenStack Compute volume server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-
-%description      volume
-OpenStack Compute (codename Nova) is open source software designed to
-provision and manage large networks of virtual machines, creating a
-redundant and scalable cloud computing platform.
-
-This package contains the Nova Volume service.
 
 %if 0%{?with_doc}
 %package doc
@@ -361,8 +257,6 @@ useradd --uid 162 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /
 exit 0
 
 %post
-/sbin/chkconfig --add %{name}-vncproxy
-
 # Initialize the DB
 if [ ! -f %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite ]; then
     runuser -l -s /bin/bash -c 'nova-manage --flagfile=/dev/null --logdir=%{_localstatedir}/log/%{shortname} --state_path=%{_sharedstatedir}/%{shortname} db sync' nova
@@ -386,131 +280,40 @@ if [ ! -f %{_sharedstatedir}/%{shortname}/CA/cacert.pem ]; then
     chmod 600 %{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
 fi
 
+# Register the services
+for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
+    /sbin/chkconfig --add %{name}-${svc}
+done
+
 %preun
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-vncproxy stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-vncproxy
+    for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
+        /sbin/service %{name}-${svc} stop >/dev/null 2>&1
+        /sbin/chkconfig --del %{name}-${svc}
+    done
 fi
 
-%post api
-/sbin/chkconfig --add %{name}-api
-/sbin/chkconfig --add %{name}-direct-api
-
-%preun api
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-api stop >/dev/null 2>&1
-    /sbin/service %{name}-direct-api stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-api
-    /sbin/chkconfig --del %{name}-direct-api
-fi
-
-%postun api
+%postun
 if [ "$1" -ge 1 ] ; then
-    /sbin/service %{name}-api condrestart > /dev/null 2>&1 || :
-    /sbin/service %{name}-direct-api condrestart > /dev/null 2>&1 || :
-fi
-
-# compute
-
-%post compute
-/sbin/chkconfig --add %{name}-ajax-console-proxy
-/sbin/chkconfig --add %{name}-compute
-
-%preun compute
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-ajax-console-proxy stop >/dev/null 2>&1
-    /sbin/service %{name}-compute stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-ajax-console-proxy
-    /sbin/chkconfig --del %{name}-compute
-fi
-
-%postun compute
-if [ "$1" -ge 1 ] ; then
-    /sbin/service %{name}-ajax-console-proxy condrestart > /dev/null 2>&1 || :
-    /sbin/service %{name}-compute condrestart > /dev/null 2>&1 || :
-fi
-
-# network
-
-%post network
-/sbin/chkconfig --add %{name}-network
-
-%preun network
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-network stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-network
-fi
-
-%postun network
-if [ "$1" -ge 1 ] ; then
-    /sbin/service %{name}-network condrestart > /dev/null 2>&1 || :
-fi
-
-# objectstore
-
-%post objectstore
-/sbin/chkconfig --add %{name}-objectstore
-
-%preun objectstore
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-objectstore stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-objectstore
-fi
-
-%postun objectstore
-if [ "$1" -ge 1 ] ; then
-    /sbin/service %{name}-objectstore condrestart > /dev/null 2>&1 || :
-fi
-
-# scheduler
-
-%post scheduler
-/sbin/chkconfig --add %{name}-scheduler
-
-%preun scheduler
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-scheduler stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-scheduler
-fi
-
-%postun scheduler
-if [ "$1" -ge 1 ] ; then
-    /sbin/service %{name}-scheduler condrestart > /dev/null 2>&1 || :
-fi
-
-# volume
-
-%post volume
-/sbin/chkconfig --add %{name}-volume
-
-%preun volume
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-volume stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-volume
-fi
-
-%postun volume
-if [ "$1" -ge 1 ] ; then
-    /sbin/service %{name}-volume condrestart > /dev/null 2>&1 || :
+    for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
+        /sbin/service %{name}-${svc} condrestart > /dev/null 2>&1 || :
+    done
 fi
 
 %files
 %doc LICENSE
 %dir %{_sysconfdir}/%{shortname}
-%attr(-, root, nova) %config(noreplace) %{_sysconfdir}/%{shortname}/%{shortname}.conf
+%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/%{shortname}/%{shortname}.conf
+%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/%{shortname}/api-paste.ini
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
+%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
+
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
-%{_bindir}/nova-console
-%{_bindir}/nova-clear-rabbit-queues
-%{_bindir}/nova-debug
-%{_bindir}/nova-instance-usage-audit
-%{_bindir}/nova-logspool
-%{_bindir}/nova-manage
-%{_bindir}/nova-spoolsentry
-%{_bindir}/nova-vncproxy
-%{_initrddir}/%{name}-vncproxy
+
+%{_bindir}/%{shortname}-*
+%{_initrddir}/%{name}-*
 %{_bindir}/stack
 %{_datarootdir}/nova
 
@@ -546,59 +349,17 @@ fi
 %{python_sitelib}/nova
 %{python_sitelib}/nova-%{version}-*.egg-info
 
-%files api
-%doc LICENSE
-%{_initrddir}/%{name}-api
-%{_initrddir}/%{name}-direct-api
-%{_bindir}/nova-api
-%{_bindir}/nova-api-ec2
-%{_bindir}/nova-api-os
-%{_bindir}/nova-direct-api
-%config(noreplace) %attr(-, nova, nobody) %{_sysconfdir}/%{shortname}/api-paste.ini
-
-%files compute
-%doc LICENSE
-%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
-%{_bindir}/nova-ajax-console-proxy
-%{_bindir}/nova-compute
-%{_initrddir}/%{name}-compute
-%{_initrddir}/%{name}-ajax-console-proxy
-
-%files network
-%doc LICENSE
-%{_bindir}/nova-network
-%{_bindir}/nova-dhcpbridge
-%{_initrddir}/%{name}-network
-
-%files objectstore
-%doc LICENSE
-%{_bindir}/nova-objectstore
-%{_initrddir}/%{name}-objectstore
-
-%files scheduler
-%doc LICENSE
-%{_bindir}/nova-scheduler
-%{_initrddir}/%{name}-scheduler
-
-%files volume
-%doc LICENSE
-%{_bindir}/nova-volume
-%{_initrddir}/%{name}-volume
-
 %if 0%{?with_doc}
 %files doc
 %doc LICENSE doc/build/html
 %endif
-
-%files node-full
-
-%files node-compute
 
 %changelog
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
 - Update to diablo-4 milestone
 - Add workaround for python-migrate issue
 - Use statically assigned uid:gid 162:162 (#732442)
+- Collapse all sub-packages into openstack-nova; w/o upgrade path
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
