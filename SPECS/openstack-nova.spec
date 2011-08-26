@@ -180,7 +180,8 @@ popd
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 %endif
 
-# Give instance-usage-audit and clear_rabbit_queues a reasonable prefix
+# Give stack, instance-usage-audit and clear_rabbit_queues a reasonable prefix
+mv %{buildroot}%{_bindir}/stack %{buildroot}%{_bindir}/nova-stack
 mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-instance-usage-audit
 mv %{buildroot}%{_bindir}/clear_rabbit_queues %{buildroot}%{_bindir}/nova-clear-rabbit-queues
 
@@ -314,7 +315,6 @@ fi
 
 %{_bindir}/nova-*
 %{_initrddir}/openstack-nova-*
-%{_bindir}/stack
 %{_datarootdir}/nova
 
 %defattr(-, nova, nobody, -)
@@ -361,6 +361,7 @@ fi
 - Use statically assigned uid:gid 162:162 (#732442)
 - Collapse all sub-packages into openstack-nova; w/o upgrade path
 - Reduce use of macros
+- Rename stack to nova-stack
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
