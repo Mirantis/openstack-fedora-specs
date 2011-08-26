@@ -1,18 +1,16 @@
 %global with_doc %{!?_without_doc:1}%{?_without_doc:0}
 
-%global shortname nova
-%global bzrtag 1449
-%global snaptag ~d4~20110816.%{bzrtag}
+%global milestone d4
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          0.2.%{bzrtag}bzr%{?dist}
+Release:          0.3.%{milestone}%{?dist}
 Summary:          OpenStack Compute (nova)
 
 Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
-Source0:          http://nova.openstack.org/tarballs/nova-%{version}%{snaptag}.tar.gz
+Source0:          http://launchpad.net/nova/diablo/diablo-4/+download/nova-%{version}~%{milestone}.tar.gz
 Source1:          %{shortname}.conf
 Source6:          %{shortname}.logrotate
 
@@ -551,6 +549,8 @@ fi
 %{_initrddir}/%{name}-api
 %{_initrddir}/%{name}-direct-api
 %{_bindir}/nova-api
+%{_bindir}/nova-api-ec2
+%{_bindir}/nova-api-os
 %{_bindir}/nova-direct-api
 %config(noreplace) %attr(-, nova, nobody) %{_sysconfdir}/%{shortname}/api-paste.ini
 
@@ -593,6 +593,9 @@ fi
 %files node-compute
 
 %changelog
+* Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
+- Update to diablo-4 milestone
+
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
 

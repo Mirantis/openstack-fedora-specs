@@ -13,7 +13,7 @@ diff --git a/bin/nova-manage b/bin/nova-manage
 index 077a89d..1baf433 100755
 --- a/bin/nova-manage
 +++ b/bin/nova-manage
-@@ -711,8 +711,7 @@ class NetworkCommands(object):
+@@ -714,8 +714,7 @@ class NetworkCommands(object):
          bridge_interface = bridge_interface or FLAGS.flat_interface or \
                             FLAGS.vlan_interface
          if not bridge_interface:
