@@ -29,7 +29,8 @@ Source21:         %{shortname}-polkit.pkla
 Source22:         %{shortname}-ifc-template
 
 Patch1:           %{shortname}-fix-flavorid-migration-failure.patch
-Patch2:           %{shortname}-do-not-require-bridge_interface-for-flatdhcpmanager.patch
+Patch2:           %{shortname}-fix-quotas-migration-failure.patch
+Patch3:           %{shortname}-do-not-require-bridge_interface-for-flatdhcpmanager.patch
 
 BuildArch:        noarch
 BuildRequires:    intltool
@@ -261,6 +262,7 @@ This package contains documentation files for %{shortname}.
 
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 find . \( -name .gitignore -o -name .placeholder \) -delete
 
@@ -595,6 +597,7 @@ fi
 %changelog
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
 - Update to diablo-4 milestone
+- Add workaround for python-migrate issue
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
