@@ -11,26 +11,26 @@ Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
 Source0:          http://launchpad.net/nova/diablo/diablo-4/+download/nova-%{version}~%{milestone}.tar.gz
-Source1:          %{shortname}.conf
-Source6:          %{shortname}.logrotate
+Source1:          nova.conf
+Source6:          nova.logrotate
 
-Source11:         %{name}-api.init
-Source12:         %{name}-compute.init
-Source13:         %{name}-network.init
-Source14:         %{name}-objectstore.init
-Source15:         %{name}-scheduler.init
-Source16:         %{name}-volume.init
-Source17:         %{name}-direct-api.init
-Source18:         %{name}-ajax-console-proxy.init
-Source19:         %{name}-vncproxy.init
+Source11:         openstack-nova-api.init
+Source12:         openstack-nova-compute.init
+Source13:         openstack-nova-network.init
+Source14:         openstack-nova-objectstore.init
+Source15:         openstack-nova-scheduler.init
+Source16:         openstack-nova-volume.init
+Source17:         openstack-nova-direct-api.init
+Source18:         openstack-nova-ajax-console-proxy.init
+Source19:         openstack-nova-vncproxy.init
 
-Source20:         %{shortname}-sudoers
-Source21:         %{shortname}-polkit.pkla
-Source22:         %{shortname}-ifc-template
+Source20:         nova-sudoers
+Source21:         nova-polkit.pkla
+Source22:         nova-ifc-template
 
-Patch1:           %{shortname}-fix-flavorid-migration-failure.patch
-Patch2:           %{shortname}-fix-quotas-migration-failure.patch
-Patch3:           %{shortname}-do-not-require-bridge_interface-for-flatdhcpmanager.patch
+Patch1:           nova-fix-flavorid-migration-failure.patch
+Patch2:           nova-fix-quotas-migration-failure.patch
+Patch3:           nova-do-not-require-bridge_interface-for-flatdhcpmanager.patch
 
 BuildArch:        noarch
 BuildRequires:    intltool
@@ -118,7 +118,7 @@ OpenStack Compute (codename Nova) is open source software designed to
 provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
-This package contains the %{shortname} Python library.
+This package contains the nova Python library.
 
 %if 0%{?with_doc}
 %package doc
@@ -150,11 +150,11 @@ OpenStack Compute (codename Nova) is open source software designed to
 provision and manage large networks of virtual machines, creating a
 redundant and scalable cloud computing platform.
 
-This package contains documentation files for %{shortname}.
+This package contains documentation files for nova.
 %endif
 
 %prep
-%setup -q -n %{shortname}-%{version}
+%setup -q -n nova-%{version}
 
 %patch1 -p1
 %patch2 -p1
@@ -185,69 +185,69 @@ mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-insta
 mv %{buildroot}%{_bindir}/clear_rabbit_queues %{buildroot}%{_bindir}/nova-clear-rabbit-queues
 
 # Setup directories
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/buckets
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/images
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/instances
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/keys
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/networks
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/tmp
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/buckets
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/images
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/instances
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/keys
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/networks
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/tmp
 install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 
 # Setup ghost sqlite DB
-touch %{buildroot}%{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
-chmod 640 %{buildroot}%{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+touch %{buildroot}%{_sharedstatedir}/nova/nova.sqlite
+chmod 640 %{buildroot}%{_sharedstatedir}/nova/nova.sqlite
 
 # Setup ghost CA cert
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/CA
-install -p -m 755 %{shortname}/CA/{*.sh,openssl.cnf.tmpl} %{buildroot}%{_sharedstatedir}/%{shortname}/CA
-install -d -m 755 %{buildroot}%{_sharedstatedir}/%{shortname}/CA/{certs,crl,newcerts,projects,reqs}
-touch %{buildroot}%{_sharedstatedir}/%{shortname}/CA/{cacert.pem,crl.pem,index.txt,openssl.cnf,serial}
-install -d -m 750 %{buildroot}%{_sharedstatedir}/%{shortname}/CA/private
-touch %{buildroot}%{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
-chmod 640 %{buildroot}%{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA
+install -p -m 755 nova/CA/{*.sh,openssl.cnf.tmpl} %{buildroot}%{_sharedstatedir}/nova/CA
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA/{certs,crl,newcerts,projects,reqs}
+touch %{buildroot}%{_sharedstatedir}/nova/CA/{cacert.pem,crl.pem,index.txt,openssl.cnf,serial}
+install -d -m 750 %{buildroot}%{_sharedstatedir}/nova/CA/private
+touch %{buildroot}%{_sharedstatedir}/nova/CA/private/cakey.pem
+chmod 640 %{buildroot}%{_sharedstatedir}/nova/CA/private/cakey.pem
 
 # Install config file
-install -d -m 755 %{buildroot}%{_sysconfdir}/%{shortname}
-install -p -D -m 640 %{SOURCE1} %{buildroot}%{_sysconfdir}/%{shortname}/%{shortname}.conf
+install -d -m 755 %{buildroot}%{_sysconfdir}/nova
+install -p -D -m 640 %{SOURCE1} %{buildroot}%{_sysconfdir}/nova/nova.conf
 
 # Install initscripts for Nova services
-install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{name}-api
-install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{name}-compute
-install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/%{name}-network
-install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/%{name}-objectstore
-install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/%{name}-scheduler
-install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/%{name}-volume
-install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/%{name}-direct-api
-install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/%{name}-ajax-console-proxy
-install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{name}-vncproxy
+install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/openstack-nova-api
+install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/openstack-nova-compute
+install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/openstack-nova-network
+install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/openstack-nova-objectstore
+install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/openstack-nova-scheduler
+install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/openstack-nova-volume
+install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/openstack-nova-direct-api
+install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/openstack-nova-ajax-console-proxy
+install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/openstack-nova-vncproxy
 
 # Install sudoers
-install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/%{shortname}
+install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/nova
 
 # Install logrotate
-install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/openstack-nova
 
 # Install pid directory
 install -d -m 755 %{buildroot}%{_localstatedir}/run/nova
 
 # Install template files
-install -p -D -m 644 %{shortname}/auth/novarc.template %{buildroot}%{_datarootdir}/%{shortname}/novarc.template
-install -p -D -m 644 %{shortname}/cloudpipe/client.ovpn.template %{buildroot}%{_datarootdir}/%{shortname}/client.ovpn.template
-install -p -D -m 644 %{shortname}/virt/libvirt.xml.template %{buildroot}%{_datarootdir}/%{shortname}/libvirt.xml.template
-install -p -D -m 644 %{shortname}/virt/interfaces.template %{buildroot}%{_datarootdir}/%{shortname}/interfaces.template
-install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/%{shortname}/interfaces.template
+install -p -D -m 644 nova/auth/novarc.template %{buildroot}%{_datarootdir}/nova/novarc.template
+install -p -D -m 644 nova/cloudpipe/client.ovpn.template %{buildroot}%{_datarootdir}/nova/client.ovpn.template
+install -p -D -m 644 nova/virt/libvirt.xml.template %{buildroot}%{_datarootdir}/nova/libvirt.xml.template
+install -p -D -m 644 nova/virt/interfaces.template %{buildroot}%{_datarootdir}/nova/interfaces.template
+install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/nova/interfaces.template
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d
-install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{shortname}.pkla
+install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
 
 # Remove ajaxterm and various other tools
-rm -fr %{buildroot}%{_datarootdir}/%{shortname}/{euca-get-ajax-console,install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx}
+rm -fr %{buildroot}%{_datarootdir}/nova/{euca-get-ajax-console,install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx}
 
 # Remove unneeded in production stuff
 rm -fr %{buildroot}%{python_sitelib}/run_tests.*
 rm -f %{buildroot}%{_bindir}/nova-combined
-rm -f %{buildroot}/usr/share/doc/%{shortname}/README*
+rm -f %{buildroot}/usr/share/doc/nova/README*
 
 %pre
 getent group nova >/dev/null || groupadd -r nova --gid 162
@@ -258,9 +258,9 @@ exit 0
 
 %post
 # Initialize the DB
-if [ ! -f %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite ]; then
-    runuser -l -s /bin/bash -c 'nova-manage --flagfile=/dev/null --logdir=%{_localstatedir}/log/%{shortname} --state_path=%{_sharedstatedir}/%{shortname} db sync' nova
-    chmod 600 %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+if [ ! -f %{_sharedstatedir}/nova/nova.sqlite ]; then
+    runuser -l -s /bin/bash -c 'nova-manage --flagfile=/dev/null --logdir=%{_localstatedir}/log/nova --state_path=%{_sharedstatedir}/nova db sync' nova
+    chmod 600 %{_sharedstatedir}/nova/nova.sqlite
 fi
 
 #
@@ -275,73 +275,73 @@ fi
 # 'nova-manage project zipfile' before ever starting any of
 # the services.
 #
-if [ ! -f %{_sharedstatedir}/%{shortname}/CA/cacert.pem ]; then
+if [ ! -f %{_sharedstatedir}/nova/CA/cacert.pem ]; then
     runuser -l -s /bin/bash -c 'cd CA && ./genrootca.sh 2>/dev/null' nova
-    chmod 600 %{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
+    chmod 600 %{_sharedstatedir}/nova/CA/private/cakey.pem
 fi
 
 # Register the services
 for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
-    /sbin/chkconfig --add %{name}-${svc}
+    /sbin/chkconfig --add openstack-nova-${svc}
 done
 
 %preun
 if [ $1 -eq 0 ] ; then
     for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
-        /sbin/service %{name}-${svc} stop >/dev/null 2>&1
-        /sbin/chkconfig --del %{name}-${svc}
+        /sbin/service openstack-nova-${svc} stop >/dev/null 2>&1
+        /sbin/chkconfig --del openstack-nova-${svc}
     done
 fi
 
 %postun
 if [ "$1" -ge 1 ] ; then
     for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
-        /sbin/service %{name}-${svc} condrestart > /dev/null 2>&1 || :
+        /sbin/service openstack-nova-${svc} condrestart > /dev/null 2>&1 || :
     done
 fi
 
 %files
 %doc LICENSE
-%dir %{_sysconfdir}/%{shortname}
-%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/%{shortname}/%{shortname}.conf
-%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/%{shortname}/api-paste.ini
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%config(noreplace) %{_sysconfdir}/sudoers.d/%{shortname}
+%dir %{_sysconfdir}/nova
+%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/nova/nova.conf
+%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/nova/api-paste.ini
+%config(noreplace) %{_sysconfdir}/logrotate.d/openstack-nova
+%config(noreplace) %{_sysconfdir}/sudoers.d/nova
 %{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
 
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
 
-%{_bindir}/%{shortname}-*
-%{_initrddir}/%{name}-*
+%{_bindir}/nova-*
+%{_initrddir}/openstack-nova-*
 %{_bindir}/stack
 %{_datarootdir}/nova
 
 %defattr(-, nova, nobody, -)
-%dir %{_sharedstatedir}/%{shortname}
-%dir %{_sharedstatedir}/%{shortname}/buckets
-%dir %{_sharedstatedir}/%{shortname}/images
-%dir %{_sharedstatedir}/%{shortname}/instances
-%dir %{_sharedstatedir}/%{shortname}/keys
-%dir %{_sharedstatedir}/%{shortname}/networks
-%dir %{_sharedstatedir}/%{shortname}/tmp
-%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/%{shortname}.sqlite
+%dir %{_sharedstatedir}/nova
+%dir %{_sharedstatedir}/nova/buckets
+%dir %{_sharedstatedir}/nova/images
+%dir %{_sharedstatedir}/nova/instances
+%dir %{_sharedstatedir}/nova/keys
+%dir %{_sharedstatedir}/nova/networks
+%dir %{_sharedstatedir}/nova/tmp
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/nova.sqlite
 
-%dir %{_sharedstatedir}/%{shortname}/CA/
-%dir %{_sharedstatedir}/%{shortname}/CA/certs
-%dir %{_sharedstatedir}/%{shortname}/CA/crl
-%dir %{_sharedstatedir}/%{shortname}/CA/newcerts
-%dir %{_sharedstatedir}/%{shortname}/CA/projects
-%dir %{_sharedstatedir}/%{shortname}/CA/reqs
-%{_sharedstatedir}/%{shortname}/CA/*.sh
-%{_sharedstatedir}/%{shortname}/CA/openssl.cnf.tmpl
-%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/cacert.pem
-%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/crl.pem
-%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/index.txt
-%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/openssl.cnf
-%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/serial
-%dir %attr(0750, -, -) %{_sharedstatedir}/%{shortname}/CA/private
-%attr(0600, -, -) %ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/%{shortname}/CA/private/cakey.pem
+%dir %{_sharedstatedir}/nova/CA/
+%dir %{_sharedstatedir}/nova/CA/certs
+%dir %{_sharedstatedir}/nova/CA/crl
+%dir %{_sharedstatedir}/nova/CA/newcerts
+%dir %{_sharedstatedir}/nova/CA/projects
+%dir %{_sharedstatedir}/nova/CA/reqs
+%{_sharedstatedir}/nova/CA/*.sh
+%{_sharedstatedir}/nova/CA/openssl.cnf.tmpl
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/cacert.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/crl.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/index.txt
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/openssl.cnf
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/serial
+%dir %attr(0750, -, -) %{_sharedstatedir}/nova/CA/private
+%attr(0600, -, -) %ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/private/cakey.pem
 
 %files -n python-nova
 %defattr(-,root,root,-)
@@ -360,6 +360,7 @@ fi
 - Add workaround for python-migrate issue
 - Use statically assigned uid:gid 162:162 (#732442)
 - Collapse all sub-packages into openstack-nova; w/o upgrade path
+- Reduce use of macros
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
