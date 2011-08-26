@@ -307,7 +307,7 @@ fi
 %config(noreplace) %attr(-, root, nova) %{_sysconfdir}/nova/api-paste.ini
 %config(noreplace) %{_sysconfdir}/logrotate.d/openstack-nova
 %config(noreplace) %{_sysconfdir}/sudoers.d/nova
-%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
+%config(noreplace) %{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
 
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
@@ -362,6 +362,7 @@ fi
 - Rename stack to nova-stack
 - Fix openssl.cnf.tmpl script-without-shebang rpmlint warning
 - Really remove ajaxterm
+- Mark polkit file as %config
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
