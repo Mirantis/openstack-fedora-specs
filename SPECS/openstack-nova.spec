@@ -354,9 +354,9 @@ rm -f %{buildroot}%{_bindir}/nova-combined
 rm -f %{buildroot}/usr/share/doc/%{shortname}/README*
 
 %pre
-getent group nova >/dev/null || groupadd -r nova --gid 8774
+getent group nova >/dev/null || groupadd -r nova --gid 162
 getent passwd nova >/dev/null || \
-useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
+useradd --uid 162 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
 -c "OpenStack Nova Daemons" nova
 exit 0
 
@@ -598,6 +598,7 @@ fi
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
 - Update to diablo-4 milestone
 - Add workaround for python-migrate issue
+- Use statically assigned uid:gid 162:162 (#732442)
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
