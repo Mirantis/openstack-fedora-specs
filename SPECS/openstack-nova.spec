@@ -197,7 +197,6 @@ install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
 
 # Setup ghost sqlite DB
 touch %{buildroot}%{_sharedstatedir}/nova/nova.sqlite
-chmod 640 %{buildroot}%{_sharedstatedir}/nova/nova.sqlite
 
 # Setup ghost CA cert
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA
@@ -207,7 +206,6 @@ install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA/{certs,crl,newcerts,pro
 touch %{buildroot}%{_sharedstatedir}/nova/CA/{cacert.pem,crl.pem,index.txt,openssl.cnf,serial}
 install -d -m 750 %{buildroot}%{_sharedstatedir}/nova/CA/private
 touch %{buildroot}%{_sharedstatedir}/nova/CA/private/cakey.pem
-chmod 640 %{buildroot}%{_sharedstatedir}/nova/CA/private/cakey.pem
 
 # Install config file
 install -d -m 755 %{buildroot}%{_sysconfdir}/nova
@@ -342,7 +340,7 @@ fi
 %ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/openssl.cnf
 %ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/serial
 %dir %attr(0750, -, -) %{_sharedstatedir}/nova/CA/private
-%attr(0600, -, -) %ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/private/cakey.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/private/cakey.pem
 
 %files -n python-nova
 %defattr(-,root,root,-)
