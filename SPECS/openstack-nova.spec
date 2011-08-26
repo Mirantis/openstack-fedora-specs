@@ -201,7 +201,8 @@ chmod 640 %{buildroot}%{_sharedstatedir}/nova/nova.sqlite
 
 # Setup ghost CA cert
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA
-install -p -m 755 nova/CA/{*.sh,openssl.cnf.tmpl} %{buildroot}%{_sharedstatedir}/nova/CA
+install -p -m 755 nova/CA/*.sh %{buildroot}%{_sharedstatedir}/nova/CA
+install -p -m 644 nova/CA/openssl.cnf.tmpl %{buildroot}%{_sharedstatedir}/nova/CA
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA/{certs,crl,newcerts,projects,reqs}
 touch %{buildroot}%{_sharedstatedir}/nova/CA/{cacert.pem,crl.pem,index.txt,openssl.cnf,serial}
 install -d -m 750 %{buildroot}%{_sharedstatedir}/nova/CA/private
@@ -357,11 +358,11 @@ fi
 %changelog
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
 - Update to diablo-4 milestone
-- Add workaround for python-migrate issue
 - Use statically assigned uid:gid 162:162 (#732442)
 - Collapse all sub-packages into openstack-nova; w/o upgrade path
 - Reduce use of macros
 - Rename stack to nova-stack
+- Fix openssl.cnf.tmpl script-without-shebang rpmlint warning
 
 * Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
 - Remove dependency on python-novaclient
