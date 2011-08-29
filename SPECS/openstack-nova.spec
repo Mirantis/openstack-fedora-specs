@@ -4,7 +4,7 @@
 
 Name:             openstack-nova
 Version:          2011.3
-Release:          0.3.%{milestone}%{?dist}
+Release:          0.4.%{milestone}%{?dist}
 Summary:          OpenStack Compute (nova)
 
 Group:            Applications/System
@@ -174,7 +174,9 @@ find nova -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
 %if 0%{?with_doc}
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 pushd doc
-sphinx-build -b html source build/html
+# Manually auto-generate to work around sphinx-build segfault
+./generate_autodoc_index.sh
+SPHINX_DEBUG=1 sphinx-build -b html source build/html
 popd
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
@@ -354,6 +356,9 @@ fi
 %endif
 
 %changelog
+* Mon Aug 29 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.4.d4
+- Add workaround for sphinx-build segfault
+
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
 - Update to diablo-4 milestone
 - Use statically assigned uid:gid 162:162 (#732442)
