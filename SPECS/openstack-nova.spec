@@ -301,7 +301,7 @@ fi
 %{_initrddir}/openstack-nova-*
 %{_datarootdir}/nova
 
-%defattr(-, nova, nobody, -)
+%defattr(-, nova, nova, -)
 %dir %{_sharedstatedir}/nova
 %dir %{_sharedstatedir}/nova/buckets
 %dir %{_sharedstatedir}/nova/images
@@ -341,6 +341,7 @@ fi
 %changelog
 * Mon Aug 29 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.4.d4
 - Don't generate root CA during %post (#707199)
+- The nobody group shouldn't own files in /var/lib/nova
 - Add workaround for sphinx-build segfault
 
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
