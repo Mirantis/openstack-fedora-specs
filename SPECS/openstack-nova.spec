@@ -265,23 +265,6 @@ if [ ! -f %{_sharedstatedir}/nova/nova.sqlite ]; then
     chmod 600 %{_sharedstatedir}/nova/nova.sqlite
 fi
 
-#
-# generate the CA certificate
-#
-# Note: this sucks; if you boot this filesystem multiple
-# times (e.g. as a VM image), then each nova instance will
-# be issuing # certs using the same CA cert.
-#
-# We need the CA cert to be lazily generated. Doing it in
-# one of the initscripts doesn't help, as you may do e.g.
-# 'nova-manage project zipfile' before ever starting any of
-# the services.
-#
-if [ ! -f %{_sharedstatedir}/nova/CA/cacert.pem ]; then
-    runuser -l -s /bin/bash -c 'cd CA && ./genrootca.sh 2>/dev/null' nova
-    chmod 600 %{_sharedstatedir}/nova/CA/private/cakey.pem
-fi
-
 # Register the services
 for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
     /sbin/chkconfig --add openstack-nova-${svc}
@@ -357,6 +340,7 @@ fi
 
 %changelog
 * Mon Aug 29 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.4.d4
+- Don't generate root CA during %post (#707199)
 - Add workaround for sphinx-build segfault
 
 * Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
