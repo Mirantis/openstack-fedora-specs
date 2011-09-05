@@ -28,9 +28,8 @@ Source20:         nova-sudoers
 Source21:         nova-polkit.pkla
 Source22:         nova-ifc-template
 
-Patch1:           nova-fix-flavorid-migration-failure.patch
-Patch2:           nova-fix-quotas-migration-failure.patch
-Patch3:           nova-do-not-require-bridge_interface-for-flatdhcpmanager.patch
+Patch1:           nova-fix-quotas-migration-failure.patch
+Patch2:           nova-do-not-require-bridge_interface-for-flatdhcpmanager.patch
 
 BuildArch:        noarch
 BuildRequires:    intltool
