@@ -1,0 +1,28 @@
+From ba747c32c7d9bfb89c3e5f8d62e5aa831af97cf9 Mon Sep 17 00:00:00 2001
+From: Mark McLoughlin <markmc@redhat.com>
+Date: Wed, 17 Aug 2011 06:40:03 +0100
+Subject: [PATCH] Do not require --bridge_interface for FlatDHCPManager
+
+Unlike VlanManager, FlatDHCPManager actually works fine without a bridge
+interface on single host deployments.
+---
+ bin/nova-manage |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+diff --git a/bin/nova-manage b/bin/nova-manage
+index 077a89d..1baf433 100755
+--- a/bin/nova-manage
++++ b/bin/nova-manage
+@@ -714,8 +714,7 @@ class NetworkCommands(object):
+         bridge_interface = bridge_interface or FLAGS.flat_interface or \
+                            FLAGS.vlan_interface
+         if not bridge_interface:
+-            interface_required = ['nova.network.manager.FlatDHCPManager',
+-                                  'nova.network.manager.VlanManager']
++            interface_required = ['nova.network.manager.VlanManager']
+             if FLAGS.network_manager in interface_required:
+                 raise exception.NetworkNotCreated(req='--bridge_interface')
+ 
+-- 
+1.7.4.4
+

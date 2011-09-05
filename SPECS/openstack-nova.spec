@@ -1,107 +1,75 @@
-%global with_doc 0
+%global with_doc %{!?_without_doc:1}%{?_without_doc:0}
 
-%if ! (0%{?fedora} > 12 || 0%{?rhel} > 5)
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%endif
+%global milestone d4
 
-Name:             nova
+Name:             openstack-nova
 Version:          2011.3
-Release:          1087.1%{?dist}
+Release:          0.4.%{milestone}%{?dist}
 Summary:          OpenStack Compute (nova)
-Distribution:     Fedora
-Vendor:           Mirantis
 
-Group:            Development/Languages
+Group:            Applications/System
 License:          ASL 2.0
 URL:              http://openstack.org/projects/compute/
-Source0:          http://nova.openstack.org/tarballs/nova.tar.gz
-Source6:          %{name}.logrotate
+Source0:          http://launchpad.net/nova/diablo/diablo-4/+download/nova-%{version}~%{milestone}.tar.gz
+Source1:          nova.conf
+Source6:          nova.logrotate
 
-# Initscripts
-Source11:         %{name}-api.init
-Source12:         %{name}-compute.init
-Source13:         %{name}-network.init
-Source14:         %{name}-objectstore.init
-Source15:         %{name}-scheduler.init
-Source16:         %{name}-volume.init
-Source17:         %{name}-direct-api.init
-Source18:         %{name}-ajax-console-proxy.init
-Source19:         %{name}-vncproxy.init
+Source11:         openstack-nova-api.init
+Source12:         openstack-nova-compute.init
+Source13:         openstack-nova-network.init
+Source14:         openstack-nova-objectstore.init
+Source15:         openstack-nova-scheduler.init
+Source16:         openstack-nova-volume.init
+Source17:         openstack-nova-direct-api.init
+Source18:         openstack-nova-ajax-console-proxy.init
+Source19:         openstack-nova-vncproxy.init
 
-Source20:         %{name}-sudoers
-Source21:         %{name}-polkit.pkla
-Source22:         %{name}-ifc-template
+Source20:         nova-sudoers
+Source21:         nova-polkit.pkla
+Source22:         nova-ifc-template
 
-
-BuildRoot:        %{_tmppath}/nova-%{version}-%{release}-root-%(%{__id_u} -n)
+Patch1:           nova-fix-flavorid-migration-failure.patch
+Patch2:           nova-fix-quotas-migration-failure.patch
+Patch3:           nova-do-not-require-bridge_interface-for-flatdhcpmanager.patch
 
 BuildArch:        noarch
 BuildRequires:    intltool
-BuildRequires:    python-devel
 BuildRequires:    python-setuptools
 BuildRequires:    python-distutils-extra >= 2.18
 BuildRequires:    python-netaddr
 BuildRequires:    python-lockfile
 
 Requires:         python-nova = %{version}-%{release}
-Requires:         sudo
-Requires:         euca2ools
+Requires:         openstack-glance
 
-Requires(post):   chkconfig grep sudo libselinux-utils
+Requires:         python-paste
+Requires:         python-paste-deploy
+
+Requires:         libvirt-python
+Requires:         libvirt >= 0.8.2
+Requires:         libxml2-python
+Requires:         python-cheetah
+Requires:         MySQL-python
+
+Requires:         euca2ools
+Requires:         openssl
+Requires:         rabbitmq-server
+Requires:         sudo
+
+Requires(post):   chkconfig
 Requires(postun): initscripts
 Requires(preun):  chkconfig
 Requires(pre):    shadow-utils qemu-kvm
 
-Packager:         "Mirantis Inc." <openstack-support@mirantis.com>
-
 %description
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-Nova is intended to be easy to extend, and adapt. For example, it currently
-uses an LDAP server for users and groups, but also includes a fake LDAP server,
-that stores data in Redis. It has extensive test coverage, and uses the Sphinx
-toolkit (the same as Python itself) for code and user documentation.
-
-%package          node-full
-Summary:          OpenStack Nova full node installation
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         %{name}-cc-config = %{version}
-Requires:         %{name}-api = %{version}-%{release}
-Requires:         %{name}-compute = %{version}-%{release}
-Requires:         %{name}-instancemonitor = %{version}-%{release}
-Requires:         %{name}-network = %{version}-%{release}
-Requires:         %{name}-objectstore = %{version}-%{release}
-Requires:         %{name}-scheduler = %{version}-%{release}
-Requires:         %{name}-volume = %{version}-%{release}
-Requires:         openstack-client
-Requires:         glance
-Requires:         rabbitmq-server
-
-%if 0%{?with_doc}
-Requires:         %{name}-doc
-%endif
-
-%description      node-full
-This package installs full set of OpenStack Nova packages and Cloud Controller
-configuration.
-
-%package          node-compute
-Summary:          OpenStack Nova compute node installation
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         %{name}-compute-config = %{version}
-Requires:         %{name}-compute = %{version}-%{release}
-Requires:         %{name}-instancemonitor = %{version}-%{release}
-
-%description      node-compute
-This package installs compute set of OpenStack Nova packages and Compute node
-configuration.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform. It gives you the
+software, control panels, and APIs required to orchestrate a cloud,
+including running instances, managing networks, and controlling access
+through users and projects. OpenStack Compute strives to be both
+hardware and hypervisor agnostic, currently supporting a variety of
+standard hardware configurations and seven major hypervisors.
 
 %package -n       python-nova
 Summary:          Nova Python libraries
@@ -121,6 +89,7 @@ Requires:         python-eventlet
 Requires:         python-greenlet
 Requires:         python-gflags
 Requires:         python-lockfile
+Requires:         python-lxml
 Requires:         python-mox
 Requires:         python-redis
 Requires:         python-routes
@@ -145,131 +114,22 @@ Requires:         coreutils
 Requires:         python-libguestfs
 
 %description -n   python-nova
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains the %{name} Python library.
-
-%package          api
-Summary:          A nova API server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-Requires:         python-paste
-Requires:         python-paste-deploy
-
-%description      api
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} API Server.
-
-%package          compute
-Summary:          A nova compute server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-Requires:         libvirt-python
-Requires:         libvirt >= 0.8.2
-Requires:         libxml2-python
-Requires:         python-cheetah
-Requires:         MySQL-python
-
-%description      compute
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} Compute Worker.
-
-%package          instancemonitor
-Summary:          A nova instancemonitor server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-
-%description      instancemonitor
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} instance monitor.
-
-%package          network
-Summary:          A nova network server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-
-%description      network
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} Network Controller.
-
-%package          objectstore
-Summary:          A nova objectstore server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-
-%description      objectstore
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} object store server.
-
-%package          scheduler
-Summary:          A nova scheduler server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-
-%description      scheduler
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} Scheduler.
-
-%package          volume
-Summary:          A nova volume server
-Group:            Applications/System
-
-Requires:         %{name} = %{version}-%{release}
-Requires:         start-stop-daemon
-
-%description      volume
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
-
-This package contains the %{name} Volume service.
+This package contains the nova Python library.
 
 %if 0%{?with_doc}
 %package doc
-Summary:          Documentation for %{name}
+Summary:          Documentation for OpenStack Compute
 Group:            Documentation
 
+Requires:         %{name} = %{version}-%{release}
+
 BuildRequires:    python-sphinx
+BuildRequires:    graphviz
+
 BuildRequires:    python-nose
 # Required to build module documents
 BuildRequires:    python-IPy
@@ -282,63 +142,93 @@ BuildRequires:    python-tornado
 BuildRequires:    python-twisted-core
 BuildRequires:    python-twisted-web
 BuildRequires:    python-webob
+# while not strictly required, quiets the build down when building docs.
+BuildRequires:    python-carrot, python-mox, python-suds, m2crypto, bpython, python-memcached, python-migrate
 
 %description      doc
-Nova is a cloud computing fabric controller (the main part of an IaaS system)
-built to match the popular AWS EC2 and S3 APIs. It is written in Python, using
-the Tornado and Twisted frameworks, and relies on the standard AMQP messaging
-protocol, and the Redis KVS.
+OpenStack Compute (codename Nova) is open source software designed to
+provision and manage large networks of virtual machines, creating a
+redundant and scalable cloud computing platform.
 
-This package contains documentation files for %{name}.
+This package contains documentation files for nova.
 %endif
 
 %prep
-%setup -q -n nova
+%setup -q -n nova-%{version}
 
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+
+find . \( -name .gitignore -o -name .placeholder \) -delete
+
+find nova -name \*.py -exec sed -i '/\/usr\/bin\/env python/d' {} \;
 
 %build
 %{__python} setup.py build
 
 %install
-rm -rf %{buildroot}
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
+# docs generation requires everything to be installed first
 %if 0%{?with_doc}
 export PYTHONPATH="$( pwd ):$PYTHONPATH"
 pushd doc
-sphinx-build -b html source build/html
+# Manually auto-generate to work around sphinx-build segfault
+./generate_autodoc_index.sh
+SPHINX_DEBUG=1 sphinx-build -b html source build/html
 popd
-
 # Fix hidden-file-or-dir warnings
 rm -fr doc/build/html/.doctrees doc/build/html/.buildinfo
 %endif
 
+# Give stack, instance-usage-audit and clear_rabbit_queues a reasonable prefix
+mv %{buildroot}%{_bindir}/stack %{buildroot}%{_bindir}/nova-stack
+mv %{buildroot}%{_bindir}/instance-usage-audit %{buildroot}%{_bindir}/nova-instance-usage-audit
+mv %{buildroot}%{_bindir}/clear_rabbit_queues %{buildroot}%{_bindir}/nova-clear-rabbit-queues
+
 # Setup directories
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/buckets
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/images
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/instances
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/keys
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/networks
 install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/tmp
 install -d -m 755 %{buildroot}%{_localstatedir}/log/nova
-cp -rp nova/CA %{buildroot}%{_sharedstatedir}/nova
+
+# Setup ghost sqlite DB
+touch %{buildroot}%{_sharedstatedir}/nova/nova.sqlite
+
+# Setup ghost CA cert
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA
+install -p -m 755 nova/CA/*.sh %{buildroot}%{_sharedstatedir}/nova/CA
+install -p -m 644 nova/CA/openssl.cnf.tmpl %{buildroot}%{_sharedstatedir}/nova/CA
+install -d -m 755 %{buildroot}%{_sharedstatedir}/nova/CA/{certs,crl,newcerts,projects,reqs}
+touch %{buildroot}%{_sharedstatedir}/nova/CA/{cacert.pem,crl.pem,index.txt,openssl.cnf,serial}
+install -d -m 750 %{buildroot}%{_sharedstatedir}/nova/CA/private
+touch %{buildroot}%{_sharedstatedir}/nova/CA/private/cakey.pem
+
+# Install config file
+install -d -m 755 %{buildroot}%{_sysconfdir}/nova
+install -p -D -m 640 %{SOURCE1} %{buildroot}%{_sysconfdir}/nova/nova.conf
 
 # Install initscripts for Nova services
-install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/%{name}-api
-install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/%{name}-compute
-install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/%{name}-network
-install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/%{name}-objectstore
-install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/%{name}-scheduler
-install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/%{name}-volume
-install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/%{name}-direct-api
-install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/%{name}-ajax-console-proxy
-install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/%{name}-vncproxy
+install -p -D -m 755 %{SOURCE11} %{buildroot}%{_initrddir}/openstack-nova-api
+install -p -D -m 755 %{SOURCE12} %{buildroot}%{_initrddir}/openstack-nova-compute
+install -p -D -m 755 %{SOURCE13} %{buildroot}%{_initrddir}/openstack-nova-network
+install -p -D -m 755 %{SOURCE14} %{buildroot}%{_initrddir}/openstack-nova-objectstore
+install -p -D -m 755 %{SOURCE15} %{buildroot}%{_initrddir}/openstack-nova-scheduler
+install -p -D -m 755 %{SOURCE16} %{buildroot}%{_initrddir}/openstack-nova-volume
+install -p -D -m 755 %{SOURCE17} %{buildroot}%{_initrddir}/openstack-nova-direct-api
+install -p -D -m 755 %{SOURCE18} %{buildroot}%{_initrddir}/openstack-nova-ajax-console-proxy
+install -p -D -m 755 %{SOURCE19} %{buildroot}%{_initrddir}/openstack-nova-vncproxy
 
 # Install sudoers
-install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/%{name}
+install -p -D -m 440 %{SOURCE20} %{buildroot}%{_sysconfdir}/sudoers.d/nova
 
 # Install logrotate
-install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -p -D -m 644 %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/openstack-nova
 
 # Install pid directory
 install -d -m 755 %{buildroot}%{_localstatedir}/run/nova
@@ -350,193 +240,92 @@ install -p -D -m 644 nova/virt/libvirt.xml.template %{buildroot}%{_datarootdir}/
 install -p -D -m 644 nova/virt/interfaces.template %{buildroot}%{_datarootdir}/nova/interfaces.template
 install -p -D -m 644 %{SOURCE22} %{buildroot}%{_datarootdir}/nova/interfaces.template
 
-# Clean CA directory
-find %{buildroot}%{_sharedstatedir}/nova/CA -name .gitignore -delete
-find %{buildroot}%{_sharedstatedir}/nova/CA -name .placeholder -delete
-
 install -d -m 755 %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d
-install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-%{name}.pkla
+install -p -D -m 644 %{SOURCE21} %{buildroot}%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
 
-# Fixing ajaxterm installation
-mv %{buildroot}%{_datarootdir}/nova/euca-get-ajax-console %{buildroot}%{_bindir}
-rm -fr %{buildroot}%{_datarootdir}/nova/{install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx} %{buildroot}%{_datarootdir}/nova/ajaxterm/configure*
+# Remove ajaxterm and various other tools
+rm -fr %{buildroot}%{_datarootdir}/nova/{ajaxterm,euca-get-ajax-console,install_venv.py,nova-debug,pip-requires,clean-vlans,with_venv.sh,esx}
 
 # Remove unneeded in production stuff
 rm -fr %{buildroot}%{python_sitelib}/run_tests.*
 rm -f %{buildroot}%{_bindir}/nova-combined
 rm -f %{buildroot}/usr/share/doc/nova/README*
 
-%clean
-rm -rf %{buildroot}
-
 %pre
-getent group nova >/dev/null || groupadd -r nova --gid 8774
+getent group nova >/dev/null || groupadd -r nova --gid 162
 getent passwd nova >/dev/null || \
-useradd --uid 8774 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
+useradd --uid 162 -r -g nova -G nova,nobody,qemu -d %{_sharedstatedir}/nova -s /sbin/nologin \
 -c "OpenStack Nova Daemons" nova
 exit 0
 
 %post
-if ! fgrep '#includedir /etc/sudoers.d' /etc/sudoers 2>&1 >/dev/null; then
-        echo '#includedir /etc/sudoers.d' >> /etc/sudoers
-fi
-if /usr/sbin/selinuxenabled; then
-	echo -e "\033[47m\033[1;31m***************************************************\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m >> \033[5mYou have SELinux enabled on your host !\033[25m <<  \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31mPlease disable it by setting \`SELINUX=disabled' \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31min /etc/sysconfig/selinux and don't forget      \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31mto reboot your host to apply that change!       \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m*\033[0m \033[40m\033[1;31m                                                \033[47m\033[1;31m*\033[0m"
-	echo -e "\033[47m\033[1;31m***************************************************\033[0m"
+# Initialize the DB
+if [ ! -f %{_sharedstatedir}/nova/nova.sqlite ]; then
+    runuser -l -s /bin/bash -c 'nova-manage --flagfile=/dev/null --logdir=%{_localstatedir}/log/nova --state_path=%{_sharedstatedir}/nova db sync' nova
+    chmod 600 %{_sharedstatedir}/nova/nova.sqlite
 fi
 
-if rpmquery openstack-nova-cc-config 1>&2 >/dev/null; then
-	# Cloud controller node detected, assuming that is contains database
-	
-	# Database init/migration
-	if [ $1 -gt 1 ]; then
-		current_version=$(nova-manage db version 2>/dev/null)
-		updated_version=$(cd %{python_sitelib}/nova/db/sqlalchemy/migrate_repo; %{__python} manage.py version)
-		if [ "$current_version" -ne "$updated_version" ]; then
-			echo "Performing Nova database upgrade"
-			/usr/bin/nova-manage db sync
-		fi
-# NOTE: Bullshit, what if I want use mysql or postgres instead default sqlite?
-#	else
-#		echo "DB init code, new installation"
-#		/usr/bin/nova-manage db sync
-#		echo "Please refer http://wiki.openstack.org/NovaInstall/RHEL6Notes for instructions"
-	fi
-fi
+# Register the services
+for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
+    /sbin/chkconfig --add openstack-nova-${svc}
+done
 
-# api
-
-%post api
-/sbin/chkconfig --add %{name}-api
-/sbin/chkconfig --add %{name}-direct-api
-
-%preun api
+%preun
 if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-api stop >/dev/null 2>&1
-    /sbin/service %{name}-direct-api stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-api
-    /sbin/chkconfig --del %{name}-direct-api
+    for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
+        /sbin/service openstack-nova-${svc} stop >/dev/null 2>&1
+        /sbin/chkconfig --del openstack-nova-${svc}
+    done
 fi
 
-%postun api
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-api condrestart
-#    /sbin/service %{name}-direct-api condrestart
-#fi
-
-# compute
-
-%post compute
-/sbin/chkconfig --add %{name}-ajax-console-proxy
-/sbin/chkconfig --add %{name}-compute
-
-%preun compute
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-ajax-console-proxy stop >/dev/null 2>&1
-    /sbin/service %{name}-compute stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-ajax-console-proxy
-    /sbin/chkconfig --del %{name}-compute
+%postun
+if [ "$1" -ge 1 ] ; then
+    for svc in api compute network objectstore scheduler volume direct-api ajax-console-proxy vncproxy; do
+        /sbin/service openstack-nova-${svc} condrestart > /dev/null 2>&1 || :
+    done
 fi
-
-%postun compute
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-ajax-console-proxy condrestart
-#    /sbin/service %{name}-compute condrestart
-#fi
-
-# network
-
-%post network
-/sbin/chkconfig --add %{name}-network
-
-%preun network
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-network stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-network
-fi
-
-%postun network
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-network condrestart
-#fi
-
-# objectstore
-
-%post objectstore
-/sbin/chkconfig --add %{name}-objectstore
-
-%preun objectstore
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-objectstore stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-objectstore
-fi
-
-%postun objectstore
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-objectstore condrestart
-#fi
-
-# scheduler
-
-%post scheduler
-/sbin/chkconfig --add %{name}-scheduler
-
-%preun scheduler
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-scheduler stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-scheduler
-fi
-
-%postun scheduler
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-scheduler condrestart
-#fi
-
-# volume
-
-%post volume
-/sbin/chkconfig --add %{name}-volume
-
-%preun volume
-if [ $1 -eq 0 ] ; then
-    /sbin/service %{name}-volume stop >/dev/null 2>&1
-    /sbin/chkconfig --del %{name}-volume
-fi
-
-%postun volume
-#if [ $1 -eq 1 ] ; then
-#    /sbin/service %{name}-volume condrestart
-#fi
 
 %files
-%defattr(-,root,root,-)
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%config(noreplace) %{_sysconfdir}/sudoers.d/%{name}
+%doc LICENSE
+%dir %{_sysconfdir}/nova
+%config(noreplace) %attr(-, root, nova) %{_sysconfdir}/nova/nova.conf
+%config(noreplace) %{_sysconfdir}/nova/api-paste.ini
+%config(noreplace) %{_sysconfdir}/logrotate.d/openstack-nova
+%config(noreplace) %{_sysconfdir}/sudoers.d/nova
+%config(noreplace) %{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
+
 %dir %attr(0755, nova, root) %{_localstatedir}/log/nova
 %dir %attr(0755, nova, root) %{_localstatedir}/run/nova
-%{_bindir}/nova-console
-%{_bindir}/nova-debug
-%{_bindir}/nova-logspool
-%{_bindir}/nova-manage
-%{_bindir}/nova-spoolsentry
-%{_bindir}/nova-vncproxy
-%{_bindir}/nova-api-ec2
-%{_bindir}/nova-api-os
-%{_bindir}/instance-usage-audit
-%{_bindir}/clear_rabbit_queues
-%{_initrddir}/%{name}-vncproxy
-%{_bindir}/stack
+
+%{_bindir}/nova-*
+%{_initrddir}/openstack-nova-*
 %{_datarootdir}/nova
-%defattr(-,nova,nobody,-)
-%{_sharedstatedir}/nova
-%{_datarootdir}/nova/setup_iptables.sh
+
+%defattr(-, nova, nova, -)
+%dir %{_sharedstatedir}/nova
+%dir %{_sharedstatedir}/nova/buckets
+%dir %{_sharedstatedir}/nova/images
+%dir %{_sharedstatedir}/nova/instances
+%dir %{_sharedstatedir}/nova/keys
+%dir %{_sharedstatedir}/nova/networks
+%dir %{_sharedstatedir}/nova/tmp
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/nova.sqlite
+
+%dir %{_sharedstatedir}/nova/CA/
+%dir %{_sharedstatedir}/nova/CA/certs
+%dir %{_sharedstatedir}/nova/CA/crl
+%dir %{_sharedstatedir}/nova/CA/newcerts
+%dir %{_sharedstatedir}/nova/CA/projects
+%dir %{_sharedstatedir}/nova/CA/reqs
+%{_sharedstatedir}/nova/CA/*.sh
+%{_sharedstatedir}/nova/CA/openssl.cnf.tmpl
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/cacert.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/crl.pem
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/index.txt
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/openssl.cnf
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/serial
+%dir %attr(0750, -, -) %{_sharedstatedir}/nova/CA/private
+%ghost %config(missingok,noreplace) %verify(not md5 size mtime) %{_sharedstatedir}/nova/CA/private/cakey.pem
 
 %files -n python-nova
 %defattr(-,root,root,-)
@@ -544,58 +333,44 @@ fi
 %{python_sitelib}/nova
 %{python_sitelib}/nova-%{version}-*.egg-info
 
-%files api
-%defattr(-,root,root,-)
-%{_initrddir}/%{name}-api
-%{_initrddir}/%{name}-direct-api
-%{_bindir}/nova-api
-%{_bindir}/nova-direct-api
-%defattr(-,nova,nobody,-)
-%config(noreplace) %{_sysconfdir}/nova/api-paste.ini
-
-%files compute
-%defattr(-,root,root,-)
-%{_sysconfdir}/polkit-1/localauthority/50-local.d/50-nova.pkla
-%{_bindir}/euca-get-ajax-console
-%{_bindir}/nova-ajax-console-proxy
-%{_bindir}/nova-compute
-%{_initrddir}/%{name}-compute
-%{_initrddir}/%{name}-ajax-console-proxy
-%{_datarootdir}/nova/ajaxterm
-
-%files instancemonitor
-%defattr(-,root,root,-)
-#{_initrddir}/%{name}-instancemonitor
-
-%files network
-%defattr(-,root,root,-)
-%{_bindir}/nova-network
-%{_bindir}/nova-dhcpbridge
-%{_initrddir}/%{name}-network
-
-%files objectstore
-%defattr(-,root,root,-)
-%{_bindir}/nova-objectstore
-%{_initrddir}/%{name}-objectstore
-
-%files scheduler
-%defattr(-,root,root,-)
-%{_bindir}/nova-scheduler
-%{_initrddir}/%{name}-scheduler
-
-%files volume
-%defattr(-,root,root,-)
-%{_bindir}/nova-volume
-%{_initrddir}/%{name}-volume
-
 %if 0%{?with_doc}
 %files doc
-%defattr(-,root,root,-)
 %doc LICENSE doc/build/html
 %endif
 
-%files node-full
-
-%files node-compute
-
 %changelog
+* Mon Aug 29 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.4.d4
+- Don't generate root CA during %post (#707199)
+- The nobody group shouldn't own files in /var/lib/nova
+- Add workaround for sphinx-build segfault
+
+* Fri Aug 26 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.3.d4
+- Update to diablo-4 milestone
+- Use statically assigned uid:gid 162:162 (#732442)
+- Collapse all sub-packages into openstack-nova; w/o upgrade path
+- Reduce use of macros
+- Rename stack to nova-stack
+- Fix openssl.cnf.tmpl script-without-shebang rpmlint warning
+- Really remove ajaxterm
+- Mark polkit file as %config
+
+* Mon Aug 22 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1449bzr
+- Remove dependency on python-novaclient
+
+* Wed Aug 17 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.1449bzr
+- Update to latest upstream.
+- nova-import-canonical-imagestore has been removed
+- nova-clear-rabbit-queues was added
+
+* Tue Aug  9 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.2.1409bzr
+- Update to newer upstream
+- nova-instancemonitor has been removed
+- nova-instance-usage-audit added
+
+* Tue Aug  9 2011 Mark McLoughlin <markmc@redhat.com> - 2011.3-0.1.bzr1130
+- More cleanups
+- Change release tag to reflect pre-release status
+
+* Wed Jun 29 2011 Matt Domsch <mdomsch@fedoraproject.org> - 2011.3-1087.1
+- Initial package from Alexander Sakhnov <asakhnov@mirantis.com>
+  with cleanups by Matt Domsch
