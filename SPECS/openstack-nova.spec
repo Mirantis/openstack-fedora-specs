@@ -28,8 +28,7 @@ Source20:         nova-sudoers
 Source21:         nova-polkit.pkla
 Source22:         nova-ifc-template
 
-Patch1:           nova-fix-quotas-migration-failure.patch
-Patch2:           nova-do-not-require-bridge_interface-for-flatdhcpmanager.patch
+Patch1:           nova-do-not-require-bridge_interface-for-flatdhcpmanager.patch
 
 BuildArch:        noarch
 BuildRequires:    intltool
@@ -156,7 +155,6 @@ This package contains documentation files for nova.
 %setup -q -n nova-%{version}
 
 %patch1 -p1
-%patch2 -p1
 
 find . \( -name .gitignore -o -name .placeholder \) -delete
 
