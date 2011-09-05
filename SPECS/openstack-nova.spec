@@ -157,7 +157,6 @@ This package contains documentation files for nova.
 
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 find . \( -name .gitignore -o -name .placeholder \) -delete
 
